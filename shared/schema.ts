@@ -34,6 +34,21 @@ export interface ButtonConfig {
   color: string;
 }
 
+// Helper to validate color format (Hex or RGB)
+function isValidColor(color: string): boolean {
+  // Hex format: #RGB or #RRGGBB
+  if (/^#([0-9A-F]{3}|[0-9A-F]{6})$/i.test(color)) {
+    return true;
+  }
+  // RGB format: rgb(r, g, b)
+  const rgbMatch = color.match(/^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/i);
+  if (rgbMatch) {
+    const [, r, g, b] = rgbMatch;
+    return parseInt(r) <= 255 && parseInt(g) <= 255 && parseInt(b) <= 255;
+  }
+  return false;
+}
+
 // Validation schema for ButtonConfig
 export const buttonConfigSchema = z.object({
   platforms: z.object({
@@ -47,5 +62,7 @@ export const buttonConfigSchema = z.object({
     message: "至少需要選擇一個平台",
   }),
   position: z.enum(['bottom-left', 'bottom-right']),
-  color: z.string().regex(/^#[0-9A-F]{6}$/i, "請選擇有效的顏色"),
+  color: z.string().refine(isValidColor, {
+    message: "請輸入有效的顏色格式（例如：#FF5733、#f57、rgb(255, 87, 51)）",
+  }),
 });
