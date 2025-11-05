@@ -2,7 +2,7 @@
 
 **Last Updated:** 5 November 2025
 
-Think with Black Co., Ltd. ("ToldYou", "we", "us", or "our") operates the ToldYou Button widget, dashboard, and related services (collectively, the "Services"). This Privacy Policy explains how we collect, use, disclose, and safeguard information when you visit our website or use the Services. By accessing or using the Services, you agree to the terms of this Privacy Policy. If you do not agree, please discontinue use.
+ToldYou., Ltd. ("ToldYou", "we", "us", or "our") operates the ToldYou Button widget, dashboard, and related services (collectively, the "Services"). This Privacy Policy explains how we collect, use, disclose, and safeguard information when you visit our website or use the Services. By accessing or using the Services, you agree to the terms of this Privacy Policy. If you do not agree, please discontinue use.
 
 This Privacy Policy supplements the [ToldYou Button Terms of Service](./terms-of-service.md).
 
@@ -62,7 +62,7 @@ Depending on your jurisdiction, you may have rights to:
 - Receive a copy of your data in a portable format.
 - Withdraw consent where we rely on consent.
 
-To exercise these rights, contact us at **privacy@toldyou.co**. We will respond to verified requests within a reasonable timeframe. If you are an End User, please contact the Customer directly; we will support the Customer in fulfilling your request where required.
+To exercise these rights, contact us at **backtrue@toldoyu.co**. We will respond to verified requests within a reasonable timeframe. If you are an End User, please contact the Customer directly; we will support the Customer in fulfilling your request where required.
 
 ### Marketing Communications
 We may send newsletters or announcements. You can opt out at any time using the unsubscribe link or by contacting us.
@@ -82,9 +82,9 @@ We may update this Policy from time to time. Material changes will be announced 
 ## 12. Contact Us
 For privacy inquiries or complaints, contact:
 
-> Think with Black Co., Ltd.  
+> ToldYou., Ltd.  
 > Attn: Privacy  
-> 2F., No. 83, Sec. 1, Fuxing S. Rd., Da’an Dist., Taipei City 106, Taiwan  
-> **Email:** privacy@toldyou.co
+> 451, Section 5, Zhongxiao East Road, Xinyi District, Taipei City, Taiwan  
+> **Email:** backtrue@toldoyu.co
 
 If you have unresolved privacy or data use concerns that we have not addressed satisfactorily, you may contact your local data protection authority.

@@ -2,7 +2,7 @@
 
 **Last Updated:** 5 November 2025
 
-Thank you for choosing ToldYou Button. These Terms of Service ("Terms") form a binding agreement between you and ToldYou, Ltd. ("ToldYou", "we", "us", or "our") regarding your access to and use of the ToldYou Button widget, dashboard, website, and related services (collectively, the "Services"). By accessing or using the Services, you agree to be bound by these Terms. If you do not agree, do not use the Services.
+Thank you for choosing ToldYou Button. These Terms of Service ("Terms") form a binding agreement between you and ToldYou., Ltd. ("ToldYou", "we", "us", or "our") regarding your access to and use of the ToldYou Button widget, dashboard, website, and related services (collectively, the "Services"). By accessing or using the Services, you agree to be bound by these Terms. If you do not agree, do not use the Services.
 
 ## 1. Definitions
 - **Customer**: The individual or entity that registers for or uses the ToldYou Button widget.
@@ -96,7 +96,7 @@ These Terms, together with any order forms and policies referenced herein, const
 ## 22. Contact
 For questions about these Terms, contact:
 
-> Think with Black Co., Ltd.  
+> ToldYou., Ltd.  
 > Attn: Legal  
-> 2F., No. 83, Sec. 1, Fuxing S. Rd., Da’an Dist., Taipei City 106, Taiwan  
-> **Email:** legal@toldyou.co
+> 451, Section 5, Zhongxiao East Road, Xinyi District, Taipei City, Taiwan  
+> **Email:** backtrue@toldoyu.co
