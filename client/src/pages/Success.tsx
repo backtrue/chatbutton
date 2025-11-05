@@ -15,9 +15,8 @@ export default function Success() {
   const { toast } = useToast();
   const [copied, setCopied] = useState(false);
 
-  // Get data from URL params or state
-  const urlParams = new URLSearchParams(window.location.search);
-  const email = urlParams.get('email') || '';
+  // Retrieve data from sessionStorage to avoid exposing email in URL
+  const email = sessionStorage.getItem('userEmail') || '';
   const code = sessionStorage.getItem('widgetCode') || '';
 
   const copyCode = async () => {
@@ -38,7 +37,7 @@ export default function Success() {
     }
   };
 
-  if (!code) {
+  if (!code || !email) {
     setLocation('/');
     return null;
   }

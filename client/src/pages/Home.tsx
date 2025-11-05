@@ -74,12 +74,12 @@ export default function Home() {
       return await response.json();
     },
     onSuccess: (response: any, variables: FormData) => {
-      // Store code in sessionStorage for success page
+      // Store data in sessionStorage for success page
       sessionStorage.setItem('widgetCode', response.code);
       sessionStorage.setItem('userEmail', variables.email);
-      
+
       // Navigate to success page using wouter (avoids page reload)
-      setLocation(`/success?email=${encodeURIComponent(variables.email)}`);
+      setLocation('/success');
     },
     onError: (error: any) => {
       toast({
