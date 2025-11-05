@@ -75,9 +75,26 @@ export function generateWidgetCode(config: ButtonConfig, lang: Language = 'zh-TW
   // Create container
   var container = document.createElement('div');
   container.id = 'toldyou-button-widget';
-  container.style.cssText = 'position:fixed;' + (config.position === 'bottom-left' ? 'left:24px;' : 'right:24px;') + 'bottom:24px;z-index:9999;display:flex;flex-direction:column-reverse;gap:12px;align-items:center;';
+  container.style.cssText = 'position:fixed;' + (config.position === 'bottom-left' ? 'left:24px;' : 'right:24px;') + 'bottom:24px;z-index:9999;display:flex;flex-direction:column;gap:12px;align-items:center;';
   
-  // Create buttons
+  // Create backlink FIRST (SEO - CRITICAL: rel="noopener" ONLY, NO nofollow/sponsored)
+  // This appears at the TOP of the widget
+  var backlink = document.createElement('a');
+  backlink.href = config.backlinkUrl;
+  backlink.target = '_blank';
+  backlink.rel = 'noopener';
+  backlink.textContent = config.backlinkText;
+  backlink.style.cssText = 'font-size:11px;color:#9ca3af;text-decoration:none;margin-bottom:4px;transition:color 0.2s;';
+  backlink.addEventListener('mouseenter', function() {
+    this.style.color = '#6b7280';
+  });
+  backlink.addEventListener('mouseleave', function() {
+    this.style.color = '#9ca3af';
+  });
+  
+  container.appendChild(backlink);
+  
+  // Create buttons AFTER backlink (appear below)
   config.buttons.forEach(function(btn) {
     var button = document.createElement('a');
     button.href = btn.url;
@@ -110,22 +127,6 @@ export function generateWidgetCode(config: ButtonConfig, lang: Language = 'zh-TW
     
     container.appendChild(button);
   });
-  
-  // Create backlink (SEO - CRITICAL: rel="noopener" ONLY, NO nofollow/sponsored)
-  var backlink = document.createElement('a');
-  backlink.href = config.backlinkUrl;
-  backlink.target = '_blank';
-  backlink.rel = 'noopener';
-  backlink.textContent = config.backlinkText;
-  backlink.style.cssText = 'font-size:11px;color:#9ca3af;text-decoration:none;margin-top:4px;transition:color 0.2s;';
-  backlink.addEventListener('mouseenter', function() {
-    this.style.color = '#6b7280';
-  });
-  backlink.addEventListener('mouseleave', function() {
-    this.style.color = '#9ca3af';
-  });
-  
-  container.appendChild(backlink);
   
   // Add to page
   if (document.readyState === 'loading') {

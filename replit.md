@@ -178,6 +178,8 @@ configs table:
    - Added `useLocation` from wouter for client-side navigation
    - Fixed API response parsing: `await response.json()` to extract widget code
    - Removed debug logging after testing complete
+   - **Fixed widget layout**: Changed from `flex-direction:column-reverse` to `flex-direction:column`
+   - **Backlink position**: "報數據" now correctly appears ABOVE platform buttons (not below)
 
 2. **Success Page Implementation:**
    - Created complete `/success` route with installation instructions

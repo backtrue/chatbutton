@@ -28,8 +28,21 @@ export function ButtonPreview({ platforms, position, color }: ButtonPreviewProps
   const positionClass = position === 'bottom-left' ? 'left-6' : 'right-6';
 
   return (
-    <div className={`absolute bottom-6 ${positionClass} flex flex-col-reverse gap-3`}>
-      {/* Platform Buttons - render ALL selected platforms */}
+    <div className={`absolute bottom-6 ${positionClass} flex flex-col gap-3`}>
+      {/* Backlink - 報數據 (SEO critical: rel="noopener" ONLY) - appears at TOP */}
+      <div className="text-xs text-gray-500 text-center mb-1">
+        <a 
+          href="https://thinkwithblack.com" 
+          target="_blank" 
+          rel="noopener"
+          className="hover:text-gray-700"
+          data-testid="preview-backlink"
+        >
+          報數據
+        </a>
+      </div>
+
+      {/* Platform Buttons - render ALL selected platforms BELOW backlink */}
       {platforms.map((platform) => {
         const Icon = platformIcons[platform];
         return (
@@ -43,19 +56,6 @@ export function ButtonPreview({ platforms, position, color }: ButtonPreviewProps
           </div>
         );
       })}
-
-      {/* Backlink - 報數據 (SEO critical: rel="noopener" ONLY) */}
-      <div className="text-xs text-gray-500 text-center mt-1">
-        <a 
-          href="https://thinkwithblack.com" 
-          target="_blank" 
-          rel="noopener"
-          className="hover:text-gray-700"
-          data-testid="preview-backlink"
-        >
-          報數據
-        </a>
-      </div>
     </div>
   );
 }
