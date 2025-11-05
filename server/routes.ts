@@ -99,7 +99,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     
     const script = generateUniversalWidgetScript();
     res.type('application/javascript');
-    res.set('Cache-Control', 'public, max-age=3600'); // Cache for 1 hour
+    if (req.query.v) {
+      res.set('Cache-Control', 'public, max-age=31536000, immutable');
+    } else {
+      res.set('Cache-Control', 'public, max-age=3600'); // Cache for 1 hour
+    }
     res.send(script);
   });
 

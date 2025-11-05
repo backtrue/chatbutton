@@ -2,6 +2,7 @@ import type { ButtonConfig } from "@shared/schema";
 import { PLATFORM_COLORS } from "@shared/platformColors";
 import { getBacklinkText, getBacklinkUrl } from "../client/src/lib/i18n";
 import type { Language } from "../client/src/lib/i18n";
+import { getWidgetVersion } from "./version";
 
 // Normalize color to Hex format
 function normalizeColor(color: string): string {
@@ -96,7 +97,8 @@ function sanitizeInstagramHandle(value: string): string {
 
 // Generate simplified embed code (new version)
 export function generateSimplifiedEmbedCode(configId: string, baseUrl: string): string {
-  return `<script src="${baseUrl}/widget.js" data-config-id="${configId}"></script>`;
+  const version = encodeURIComponent(getWidgetVersion());
+  return `<script src="${baseUrl}/widget.js?v=${version}" data-config-id="${configId}"></script>`;
 }
 
 // Generate widget JavaScript code (legacy - kept for backwards compatibility)
