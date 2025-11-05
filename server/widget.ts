@@ -36,11 +36,7 @@ export function generateSimplifiedEmbedCode(configId: string): string {
     ? `https://${process.env.REPLIT_DOMAINS.split(',')[0]}`
     : '';
   
-  return `<!-- ToldYou Button Widget -->
-<script 
-  src="${baseUrl}/widget.js"
-  data-config-id="${configId}"
-></script>`;
+  return `<script src="${baseUrl}/widget.js" data-config-id="${configId}"></script>`;
 }
 
 // Generate widget JavaScript code (legacy - kept for backwards compatibility)
