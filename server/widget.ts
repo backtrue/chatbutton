@@ -29,7 +29,21 @@ function normalizeColor(color: string): string {
   return color; // Fallback
 }
 
-// Generate widget JavaScript code
+// Generate simplified embed code (new version)
+export function generateSimplifiedEmbedCode(configId: string): string {
+  // Get the deployment URL (Replit or custom domain)
+  const baseUrl = process.env.REPLIT_DOMAINS 
+    ? `https://${process.env.REPLIT_DOMAINS.split(',')[0]}`
+    : '';
+  
+  return `<!-- ToldYou Button Widget -->
+<script 
+  src="${baseUrl}/widget.js"
+  data-config-id="${configId}"
+></script>`;
+}
+
+// Generate widget JavaScript code (legacy - kept for backwards compatibility)
 export function generateWidgetCode(config: ButtonConfig, lang: Language = 'zh-TW'): string {
   const { platforms, position, color } = config;
   const backlinkText = getBacklinkText(lang);

@@ -2,7 +2,8 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { createEmailService } from "./email";
-import { generateWidgetCode } from "./widget";
+import { generateWidgetCode, generateSimplifiedEmbedCode } from "./widget";
+import { generateUniversalWidgetScript } from "./widget-loader";
 import { insertConfigSchema, buttonConfigSchema } from "@shared/schema";
 import type { ButtonConfig } from "@shared/schema";
 import type { Language } from "../client/src/lib/i18n";
@@ -20,13 +21,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Validate button config
       buttonConfigSchema.parse(configJson);
 
-      // Generate widget code
-      const widgetCode = generateWidgetCode(configJson, validatedData.lang as Language);
-
-      // Save to database
+      // Save to database first to get the config ID
       const config = await storage.createConfig(validatedData);
+      
+      // Generate simplified embed code using the config ID
+      const widgetCode = generateSimplifiedEmbedCode(config.id);
+      
+      // Also generate full code for email (legacy format with all details)
+      const fullWidgetCode = generateWidgetCode(configJson, validatedData.lang as Language);
 
-      // Send email with code
+      // Send email with code (using full code for completeness)
       try {
         await emailService.sendCode(
           validatedData.email,
@@ -42,7 +46,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({
         success: true,
         id: config.id,
-        code: widgetCode,
+        code: widgetCode, // Return simplified code to frontend
       });
     } catch (error: any) {
       console.error('Error creating config:', error);
@@ -77,6 +81,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         error: 'Internal server error',
       });
     }
+  });
+
+  // GET /widget.js - Serve universal widget script
+  app.get('/widget.js', (req, res) => {
+    const script = generateUniversalWidgetScript();
+    res.type('application/javascript');
+    res.set('Cache-Control', 'public, max-age=3600'); // Cache for 1 hour
+    res.send(script);
   });
 
   const httpServer = createServer(app);
