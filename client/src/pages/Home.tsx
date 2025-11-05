@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useMutation } from '@tanstack/react-query';
+import { useLocation } from 'wouter';
 import { apiRequest } from '@/lib/queryClient';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -44,6 +45,7 @@ type FormData = z.infer<typeof formSchema>;
 
 export default function Home() {
   const { toast } = useToast();
+  const [, setLocation] = useLocation();
   const [selectedPlatforms, setSelectedPlatforms] = useState<Set<string>>(new Set());
   const [position, setPosition] = useState<'bottom-left' | 'bottom-right'>('bottom-right');
   const [color, setColor] = useState('#2563eb');
@@ -60,7 +62,7 @@ export default function Home() {
 
   const submitMutation = useMutation({
     mutationFn: async (data: FormData) => {
-      return await apiRequest('POST', '/api/configs', {
+      const response = await apiRequest('POST', '/api/configs', {
         email: data.email,
         configJson: {
           platforms: data.platforms,
@@ -69,12 +71,15 @@ export default function Home() {
         } as ButtonConfig,
         lang: 'zh-TW',
       });
+      return await response.json();
     },
     onSuccess: (response: any, variables: FormData) => {
       // Store code in sessionStorage for success page
       sessionStorage.setItem('widgetCode', response.code);
-      // Navigate to success page
-      window.location.href = `/success?email=${encodeURIComponent(variables.email)}`;
+      sessionStorage.setItem('userEmail', variables.email);
+      
+      // Navigate to success page using wouter (avoids page reload)
+      setLocation(`/success?email=${encodeURIComponent(variables.email)}`);
     },
     onError: (error: any) => {
       toast({
@@ -200,15 +205,15 @@ export default function Home() {
               {platforms.map((platform) => 
                 selectedPlatforms.has(platform.id) && (
                   <div key={`input-${platform.id}`} className="mb-6">
-                    <Label htmlFor={platform.id} className="text-base font-medium mb-2 block">
+                    <Label htmlFor={`platform-${platform.id}`} className="text-base font-medium mb-2 block">
                       {platform.inputLabel}
                     </Label>
                     <Input
-                      id={platform.id}
+                      id={`platform-${platform.id}`}
                       placeholder={platform.placeholder}
                       {...form.register(`platforms.${platform.id}` as any)}
                       className="w-full"
-                      data-testid={`input-${platform.id}`}
+                      data-testid={`input-platform-${platform.id}`}
                     />
                   </div>
                 )
