@@ -1,39 +1,60 @@
 import type { ButtonConfig } from "@shared/schema";
 import { getBacklinkText } from "../client/src/lib/i18n";
+import { Resend } from 'resend';
 
 export interface EmailService {
   sendCode(email: string, code: string, config: ButtonConfig, lang: string): Promise<void>;
 }
 
-// Resend Email Service
+// Resend Email Service using Replit Integration
 export class ResendEmailService implements EmailService {
-  private apiKey: string;
+  private async getResendClient() {
+    const hostname = process.env.REPLIT_CONNECTORS_HOSTNAME;
+    const xReplitToken = process.env.REPL_IDENTITY 
+      ? 'repl ' + process.env.REPL_IDENTITY 
+      : process.env.WEB_REPL_RENEWAL 
+      ? 'depl ' + process.env.WEB_REPL_RENEWAL 
+      : null;
 
-  constructor(apiKey: string) {
-    this.apiKey = apiKey;
+    if (!xReplitToken) {
+      throw new Error('X_REPLIT_TOKEN not found for repl/depl');
+    }
+
+    const connectionSettings = await fetch(
+      'https://' + hostname + '/api/v2/connection?include_secrets=true&connector_names=resend',
+      {
+        headers: {
+          'Accept': 'application/json',
+          'X_REPLIT_TOKEN': xReplitToken
+        }
+      }
+    ).then(res => res.json()).then(data => data.items?.[0]);
+
+    if (!connectionSettings || (!connectionSettings.settings.api_key)) {
+      throw new Error('Resend not connected');
+    }
+    
+    return {
+      client: new Resend(connectionSettings.settings.api_key),
+      fromEmail: connectionSettings.settings.from_email
+    };
   }
 
   async sendCode(email: string, code: string, config: ButtonConfig, lang: string): Promise<void> {
     const subject = this.getSubject(lang);
     const html = this.generateEmailHTML(code, config, lang);
 
-    const response = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${this.apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        from: 'ToldYou Button <onboarding@resend.dev>',
-        to: email,
-        subject,
-        html,
-      }),
+    const { client, fromEmail } = await this.getResendClient();
+
+    const { error } = await client.emails.send({
+      from: fromEmail,
+      to: email,
+      subject,
+      html,
     });
 
-    if (!response.ok) {
-      const error = await response.text();
-      throw new Error(`Failed to send email: ${error}`);
+    if (error) {
+      throw new Error(`Failed to send email: ${error.message}`);
     }
   }
 
@@ -64,18 +85,23 @@ export class ResendEmailService implements EmailService {
     .instructions li { margin: 8px 0; }
     .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb; font-size: 14px; color: #6b7280; text-align: center; }
     .badge { display: inline-block; background: #dcfce7; color: #166534; padding: 4px 12px; border-radius: 4px; font-size: 14px; font-weight: 600; }
+    .highlight { background: #fef3c7; padding: 2px 6px; border-radius: 3px; }
   </style>
 </head>
 <body>
   <h1>🎉 您的聊天按鈕程式碼已準備就緒！</h1>
   <p>感謝您使用 <strong>ToldYou Button</strong>！以下是您的專屬按鈕程式碼。</p>
   
-  <p><span class="badge">✓ 完全免費</span> <span class="badge">✓ 無限使用</span></p>
+  <p><span class="badge">✓ 完全免費</span> <span class="badge">✓ 無限使用</span> <span class="badge">✓ 超簡短程式碼</span></p>
 
-  <h2>📋 您的程式碼</h2>
+  <h2>📋 您的程式碼（只有 3 行！）</h2>
   <div class="code-block">
     <code>${this.escapeHtml(code)}</code>
   </div>
+
+  <p style="background: #dbeafe; padding: 12px; border-radius: 6px; font-size: 14px;">
+    💡 <strong>新版本！</strong>我們已將程式碼簡化為 3 行，更方便安裝。所有設定都安全儲存在雲端。
+  </p>
 
   <h2>💡 安裝說明</h2>
   
@@ -110,51 +136,63 @@ export class ResendEmailService implements EmailService {
   </div>
 
   <h2>✨ 預覽效果</h2>
-  <p>上傳後，重新整理您的網站，您將在<strong>${config.position === 'bottom-right' ? '右下角' : '左下角'}</strong>看到聊天按鈕！</p>
+  <p>安裝後，您的網站右下角（或左下角）將出現一個可收合的聊天按鈕：</p>
+  <ul>
+    <li>點擊主按鈕可展開/收合平台選項</li>
+    <li>每個平台按鈕使用官方品牌色（LINE 綠、Messenger 藍等）</li>
+    <li>主按鈕使用您自訂的顏色</li>
+    <li>自動響應式設計，在手機上也能完美顯示</li>
+  </ul>
+
+  <h2>🔧 常見問題</h2>
+  <p><strong>Q: 按鈕沒有出現？</strong></p>
+  <p>A: 請確認程式碼貼在 <code>&lt;/body&gt;</code> 標籤之前，並清除瀏覽器快取重新整理。</p>
+  
+  <p><strong>Q: 可以改變按鈕顏色或位置嗎？</strong></p>
+  <p>A: 請回到 ToldYou Button 重新生成新的程式碼，選擇不同的顏色和位置即可。</p>
 
   <div class="footer">
-    <p>如有任何問題，歡迎聯絡我們的客服團隊。</p>
-    <p>© 2024 ToldYou Button · Powered by <a href="https://thinkwithblack.com" target="_blank" style="color: #2563eb; text-decoration: none;">報數據</a></p>
+    <p>需要更多協助？訪問 <a href="https://thinkwithblack.com" style="color: #2563eb; text-decoration: none;">報數據</a></p>
+    <p style="margin-top: 10px; color: #9ca3af; font-size: 12px;">
+      © 2024 ToldYou Button · 由 <a href="https://thinkwithblack.com" style="color: #9ca3af;">報數據</a> 提供
+    </p>
   </div>
 </body>
 </html>
     `.trim();
   }
 
-  private escapeHtml(text: string): string {
-    const map: Record<string, string> = {
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#039;'
-    };
-    return text.replace(/[&<>"']/g, (m) => map[m]);
+  private escapeHtml(unsafe: string): string {
+    return unsafe
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
   }
 }
 
-// Mock Email Service for development/testing
+// Mock Email Service for development
 export class MockEmailService implements EmailService {
   async sendCode(email: string, code: string, config: ButtonConfig, lang: string): Promise<void> {
-    console.log('='.repeat(80));
-    console.log('📧 MOCK EMAIL SENT');
-    console.log('='.repeat(80));
-    console.log(`To: ${email}`);
-    console.log(`Subject: 您的 ToldYou 聊天按鈕程式碼已準備就緒`);
-    console.log('\n--- CODE ---');
-    console.log(code);
-    console.log('='.repeat(80));
+    console.log('📧 [Mock Email Service] Would send email to:', email);
+    console.log('Subject:', this.getSubject(lang));
+    console.log('Code length:', code.length, 'characters');
+    console.log('---');
+  }
+
+  private getSubject(lang: string): string {
+    const subjects: Record<string, string> = {
+      'zh-TW': '您的 ToldYou 聊天按鈕程式碼已準備就緒',
+      'ja': 'ToldYou チャットボタンのコードが準備完了しました',
+      'en': 'Your ToldYou Chat Button Code is Ready',
+    };
+    return subjects[lang] || subjects['zh-TW'];
   }
 }
 
-// Factory function to create email service
+// Factory function
 export function createEmailService(): EmailService {
-  const apiKey = process.env.RESEND_API_KEY;
-  
-  if (!apiKey) {
-    console.warn('⚠️  RESEND_API_KEY not found. Using MockEmailService.');
-    return new MockEmailService();
-  }
-  
-  return new ResendEmailService(apiKey);
+  // Always use Resend integration
+  return new ResendEmailService();
 }
