@@ -168,9 +168,67 @@ configs table:
 - Platform buttons use `rel="noopener noreferrer"` (standard security practice)
 - Widget installations create organic backlink network
 
-## Recent Changes (November 5, 2024)
+## Recent Changes
 
-**P1 MVP Complete - All Core Features Implemented:**
+### November 5, 2024 (PM) - Collapsible FAB Widget Redesign
+
+**Major Architecture Change: From Static Buttons to Collapsible FAB**
+
+1. **Platform Brand Colors Implementation:**
+   - Created `shared/platformColors.ts` with brand color constants
+   - LINE: #06C755, Messenger: #0084FF, WhatsApp: #25D366, Instagram: #E4405F, Phone: #10B981, Email: #6366F1
+   - All platform buttons now use official brand colors for better recognition
+
+2. **Enhanced Color Picker:**
+   - Added custom color input supporting multiple formats:
+     - Hex: #RGB and #RRGGBB (e.g., #f57, #ff5733)
+     - RGB: rgb(r, g, b) (e.g., rgb(255, 87, 51))
+   - Live color preview square showing current selection
+   - Client-side validation with helpful error messages
+   - 8 preset colors remain available for quick selection
+
+3. **Schema & Validation Updates:**
+   - Updated `shared/schema.ts` to accept Hex/RGB formats
+   - Backend normalization in `widget.ts` converts all inputs to #RRGGBB format
+   - Ensures consistency across database storage and widget generation
+
+4. **Widget Code Generation (server/widget.ts):**
+   - **Complete rewrite to collapsible FAB pattern**
+   - DOM structure (append order → visual bottom-to-top):
+     1. `platformContainer` - Platform buttons (expand upward, each uses brand color)
+     2. `mainButton` - Main FAB trigger (uses user's custom color)
+     3. `backlink` - "報數據" SEO link (last element = bottom position)
+   - Interaction behaviors:
+     - Click main button: toggle expand/collapse
+     - Click outside: auto-collapse
+     - ESC key: close menu
+   - CSS animations: translateY + opacity with 0.18s transitions
+   - Staggered animation delay for platform buttons (0.03s per button)
+   - Accessibility: `aria-label` and `aria-expanded` attributes
+
+5. **Button Preview Component:**
+   - Updated to mirror runtime collapsible behavior
+   - Toggle button to preview expand/collapse states
+   - Platform buttons show brand colors
+   - Main button shows user's custom color
+   - "報數據" correctly positioned at bottom
+
+**Testing Results:**
+- ✅ E2E test verified full user flow with custom colors (#FF5733, rgb(138,43,226))
+- ✅ Color normalization working: rgb(138,43,226) → #8a2be2
+- ✅ All platform brand colors correctly rendered in widget code
+- ✅ SEO backlink uses rel="noopener" only (no nofollow/sponsored)
+- ✅ DOM append order confirmed: platformContainer → mainButton → backlink
+- ✅ Cross-format color input validated
+
+**Architecture Review:**
+- Architect: PASS - All requirements fulfilled
+- Security: No issues observed
+- Recommended: Monitor cross-browser animation performance post-deployment
+
+### November 5, 2024 (AM) - P1 MVP Complete
+
+**All Core Features Implemented:**
 
 1. **Frontend Fixes:**
    - Fixed data-testid naming conflict between platform inputs and email input
