@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useMutation } from '@tanstack/react-query';
-import { useLocation } from 'wouter';
+import { Link, useLocation } from 'wouter';
 import { apiRequest } from '@/lib/queryClient';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -329,10 +329,10 @@ export default function Home() {
         {/* Footer */}
         <footer className="mt-8 text-center text-sm text-muted-foreground">
           <p>
-            © 2024 ToldYou Button · 
-            <a 
-              href="https://thinkwithblack.com" 
-              target="_blank" 
+            © 2024 ToldYou Button ·
+            <a
+              href="https://thinkwithblack.com"
+              target="_blank"
               rel="noopener"
               className="ml-1 text-primary hover:underline"
               data-testid="link-home-footer-backlink"
@@ -340,6 +340,23 @@ export default function Home() {
               報數據
             </a>
           </p>
+          <nav className="mt-2 flex items-center justify-center gap-3">
+            <Link
+              href="/legal/terms"
+              className="text-primary hover:underline"
+              data-testid="link-home-footer-terms"
+            >
+              使用者條款
+            </Link>
+            <span aria-hidden="true">·</span>
+            <Link
+              href="/legal/privacy"
+              className="text-primary hover:underline"
+              data-testid="link-home-footer-privacy"
+            >
+              隱私權政策
+            </Link>
+          </nav>
         </footer>
       </main>
     </div>

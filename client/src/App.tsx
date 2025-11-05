@@ -6,12 +6,16 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Home from "@/pages/Home";
 import Success from "@/pages/Success";
 import NotFound from "@/pages/not-found";
+import TermsZhTWPage from "@/pages/legal/terms.zh-TW";
+import PrivacyZhTWPage from "@/pages/legal/privacy.zh-TW";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/success" component={Success} />
+      <Route path="/legal/terms" component={TermsZhTWPage} />
+      <Route path="/legal/privacy" component={PrivacyZhTWPage} />
       <Route component={NotFound} />
     </Switch>
   );

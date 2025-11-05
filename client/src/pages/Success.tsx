@@ -1,4 +1,4 @@
-import { useLocation } from 'wouter';
+import { Link, useLocation } from 'wouter';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Check, Copy, FileCode, ArrowLeft } from 'lucide-react';
@@ -182,10 +182,10 @@ export default function Success() {
         {/* Footer */}
         <footer className="mt-8 text-center text-sm text-muted-foreground">
           <p>
-            © 2024 ToldYou Button · 
-            <a 
-              href="https://thinkwithblack.com" 
-              target="_blank" 
+            © 2024 ToldYou Button ·
+            <a
+              href="https://thinkwithblack.com"
+              target="_blank"
               rel="noopener"
               className="ml-1 text-primary hover:underline"
               data-testid="link-footer-backlink"
@@ -193,6 +193,23 @@ export default function Success() {
               報數據
             </a>
           </p>
+          <nav className="mt-2 flex items-center justify-center gap-3">
+            <Link
+              href="/legal/terms"
+              className="text-primary hover:underline"
+              data-testid="link-success-footer-terms"
+            >
+              使用者條款
+            </Link>
+            <span aria-hidden="true">·</span>
+            <Link
+              href="/legal/privacy"
+              className="text-primary hover:underline"
+              data-testid="link-success-footer-privacy"
+            >
+              隱私權政策
+            </Link>
+          </nav>
         </footer>
       </main>
     </div>
