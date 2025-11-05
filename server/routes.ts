@@ -24,8 +24,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Save to database first to get the config ID
       const config = await storage.createConfig(validatedData);
       
+      // Construct base URL from request
+      const baseUrl = `${req.protocol}://${req.get('host')}`;
+      
       // Generate simplified embed code using the config ID
-      const widgetCode = generateSimplifiedEmbedCode(config.id);
+      const widgetCode = generateSimplifiedEmbedCode(config.id, baseUrl);
       
       // Also generate full code for email (legacy format with all details)
       const fullWidgetCode = generateWidgetCode(configJson, validatedData.lang as Language);

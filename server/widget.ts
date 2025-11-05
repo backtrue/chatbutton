@@ -30,12 +30,7 @@ function normalizeColor(color: string): string {
 }
 
 // Generate simplified embed code (new version)
-export function generateSimplifiedEmbedCode(configId: string): string {
-  // Get the deployment URL (Replit or custom domain)
-  const baseUrl = process.env.REPLIT_DOMAINS 
-    ? `https://${process.env.REPLIT_DOMAINS.split(',')[0]}`
-    : '';
-  
+export function generateSimplifiedEmbedCode(configId: string, baseUrl: string): string {
   return `<script src="${baseUrl}/widget.js" data-config-id="${configId}"></script>`;
 }
 
