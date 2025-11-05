@@ -53,8 +53,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // GET /api/widget/:id - Get widget code for a specific config (P2 feature)
-  app.get('/api/widget/:id', async (req, res) => {
+  // GET /api/configs/:id - Get configuration JSON for widget
+  app.get('/api/configs/:id', async (req, res) => {
     try {
       const config = await storage.getConfigById(req.params.id);
       
@@ -65,14 +65,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      const widgetCode = generateWidgetCode(
-        config.configJson as ButtonConfig,
-        config.lang as Language
-      );
-
-      res.type('application/javascript').send(widgetCode.replace(/<\/?script>/g, ''));
+      res.json({
+        success: true,
+        config: config.configJson,
+        lang: config.lang,
+      });
     } catch (error: any) {
-      console.error('Error fetching widget:', error);
+      console.error('Error fetching config:', error);
       res.status(500).json({
         success: false,
         error: 'Internal server error',
