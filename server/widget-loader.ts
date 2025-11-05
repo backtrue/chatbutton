@@ -27,10 +27,18 @@ export function generateUniversalWidgetScript(): string {
   var scripts = document.getElementsByTagName('script');
   var currentScript = scripts[scripts.length - 1];
   var configId = currentScript.getAttribute('data-config-id');
-  var apiBase = currentScript.getAttribute('data-api-base') || '';
   
   if (!configId) {
     console.error('ToldYou Button: data-config-id attribute is required');
+    return;
+  }
+  
+  // Derive API base URL from widget script src
+  var scriptSrc = currentScript.src;
+  var apiBase = scriptSrc ? scriptSrc.replace(/\\/widget\\.js.*$/, '') : '';
+  
+  if (!apiBase) {
+    console.error('ToldYou Button: Unable to determine API base URL');
     return;
   }
   
