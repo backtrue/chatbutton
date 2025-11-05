@@ -12,14 +12,13 @@ We collect information from two categories of individuals:
 - **End Users**: Visitors who interact with the widget embedded on a Customer’s website.
 
 ### 1.1 Information You Provide to Us
-- **Account Registration**: Name, email address, password, company name, invoicing details, language preferences, and other profile data.
+- **Service Registration**: Email address, language preference you select, and the button configuration content (Config JSON) you submit.
 - **Communications**: Messages you send to our support team, survey responses, or other feedback.
-- **Billing**: Payment method details processed by our payment partners (we store only limited billing metadata such as transaction IDs and billing address).
 
 ### 1.2 Information Collected Automatically
 - **Usage Data**: Log files, IP address, browser type, referring/exit pages, and timestamps.
 - **Device Data**: Device identifiers, operating system, screen size, and network provider.
-- **Cookies & Similar Technologies**: We use cookies, local storage, and scripts to remember preferences, authenticate sessions, and analyze traffic. You can control cookies via browser settings; disabling cookies may limit functionality.
+- **Cookies & Similar Technologies**: We use cookies, local storage, and scripts to remember preferences and analyze traffic. You can control cookies via browser settings; disabling cookies may limit functionality.
 
 ### 1.3 End User Data
 When End Users click messaging buttons configured by the Customer, we may process the identifiers that the Customer provides (e.g., LINE ID, Messenger Page name, Instagram handle, WhatsApp number, phone number, email address). We do not store chat transcripts between Customers and End Users. For analytics and security, we may log event metadata (e.g., button clicked, timestamp, IP address). Customers are responsible for obtaining any required consent from End Users before submitting their data to us.
@@ -28,7 +27,7 @@ When End Users click messaging buttons configured by the Customer, we may proces
 We use collected information to:
 1. Provide, maintain, and improve the Services.
 2. Authenticate users and secure accounts.
-3. Process payments and send transactional emails.
+3. Deliver the requested embed code and service notifications.
 4. Respond to support requests and communicate important updates.
 5. Analyze usage, monitor performance, and prevent abuse.
 6. Comply with applicable laws, regulations, and legal processes.
@@ -48,7 +47,7 @@ We do not sell personal data. We share information with:
 - **Business Transfers**: In connection with a merger, acquisition, financing, or sale of assets, subject to confidentiality safeguards.
 
 ## 5. Data Retention
-We retain Customer data for as long as your Account is active or as needed to provide the Services. Configuration records, invoices, and logs may be retained for legal, security, and accounting requirements. We retain End User event metadata for up to 24 months unless a shorter period is required by law or a Customer requests deletion sooner (subject to legitimate interests).
+We retain Customer data for as long as you use the Services or as needed to provide them. Configuration records and logs may be retained for legal, security, and accounting requirements. We retain End User event metadata for up to 24 months unless a shorter period is required by law or a Customer requests deletion sooner (subject to legitimate interests).
 
 ## 6. International Transfers
 We operate in Taiwan and may process data in other countries where we or our service providers maintain facilities. When transferring personal data internationally, we rely on appropriate safeguards such as Standard Contractual Clauses or other lawful mechanisms.
@@ -63,7 +62,7 @@ Depending on your jurisdiction, you may have rights to:
 - Receive a copy of your data in a portable format.
 - Withdraw consent where we rely on consent.
 
-To exercise these rights, contact us at **privacy@toldyou.co**. Customers can also manage most Account information via the dashboard. We will respond to verified requests within a reasonable timeframe. If you are an End User, please contact the Customer directly; we will support the Customer in fulfilling your request where required.
+To exercise these rights, contact us at **privacy@toldyou.co**. We will respond to verified requests within a reasonable timeframe. If you are an End User, please contact the Customer directly; we will support the Customer in fulfilling your request where required.
 
 ### Marketing Communications
 We may send newsletters or announcements. You can opt out at any time using the unsubscribe link or by contacting us.

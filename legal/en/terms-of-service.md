@@ -2,30 +2,27 @@
 
 **Last Updated:** 5 November 2025
 
-Thank you for choosing ToldYou Button. These Terms of Service ("Terms") form a binding agreement between you and Think with Black Co., Ltd. ("ToldYou", "we", "us", or "our") regarding your access to and use of the ToldYou Button widget, dashboard, website, and related services (collectively, the "Services"). By registering for, accessing, or using the Services, you agree to be bound by these Terms. If you do not agree, do not use the Services.
+Thank you for choosing ToldYou Button. These Terms of Service ("Terms") form a binding agreement between you and ToldYou, Ltd. ("ToldYou", "we", "us", or "our") regarding your access to and use of the ToldYou Button widget, dashboard, website, and related services (collectively, the "Services"). By accessing or using the Services, you agree to be bound by these Terms. If you do not agree, do not use the Services.
 
 ## 1. Definitions
-- **Account**: A unique profile created to access the Services.
-- **Customer**: The individual or entity that registers for an Account and configures the ToldYou Button widget.
+- **Customer**: The individual or entity that registers for or uses the ToldYou Button widget.
 - **Customer Content**: Any text, graphics, links, media, or other materials that a Customer submits, configures, or makes available through the Services, including destination links for messaging channels.
 - **End User**: Visitors that interact with the ToldYou Button widget embedded on a Customer's website or mobile property.
-- **Paid Plan**: A subscription tier that provides additional functionality beyond the free plan.
+- **Free Service**: The ToldYou Button P1 service currently offered at no charge, whose business model includes a visible backlink (e.g., the "報數據" label) pointing to our designated website.
 
 ## 2. Eligibility
-You must be at least 18 years old or the age of legal majority in your jurisdiction to use the Services. By creating an Account, you affirm that you meet this requirement and, if you register on behalf of an organization, that you have authority to bind that organization to these Terms.
+You must be at least 18 years old or the age of legal majority in your jurisdiction to use the Services. By using the Services, you affirm that you meet this requirement and, if you use the Services on behalf of an organization, that you have authority to bind that organization to these Terms.
 
 ## 3. Changes to the Services and Terms
 We may modify the Services or these Terms from time to time. Material changes will be communicated by posting an updated version with a revised "Last Updated" date or by other reasonable notice. Continued use of the Services after changes become effective constitutes acceptance of the updated Terms.
 
-## 4. Account Registration and Security
-You must provide accurate, current, and complete information when creating an Account and keep it updated. You are solely responsible for safeguarding your login credentials and for all activities under your Account. Notify us promptly at **legal@toldyou.co** of any unauthorized access or security incident.
+## 4. Service Registration and Communications
+Registering for the P1 Free Service only requires a valid email address. You must provide accurate, current, and complete information. You agree that we may send service-related codes and notices to the email address you provide.
 
-## 5. Plans, Subscriptions, and Payments
-1. **Free Plan**: Certain functionality is available at no charge. We reserve the right to modify or discontinue the free plan.
-2. **Paid Plans**: Fees, billing frequency, and included features are described at checkout or in your order confirmation. Fees are quoted in New Taiwan Dollars (NTD) unless stated otherwise and are exclusive of taxes, levies, or duties.
-3. **Payment Method**: By subscribing to a Paid Plan, you authorize us or our payment processors to charge your designated payment method on a recurring basis until cancellation.
-4. **Refund Policy**: You may request a refund for Paid Plans within 15 days of the initial purchase by contacting **legal@toldyou.co** with your order reference. Renewal payments are non-refundable unless otherwise required by law.
-5. **Late Payments**: If a payment fails, we may suspend or downgrade your access until the amount is paid.
+## 5. Service Plans and Future Changes
+1. **Free Service**: The P1 stage of the Services is currently provided at no charge. As consideration for using the Free Service, you agree that the installed widget will display a visible backlink (e.g., with the "報數據" anchor text) pointing to a website designated by ToldYou (e.g., thinkwithblack.com). You agree not to hide, obscure, or remove this backlink by any means, including CSS or JavaScript.
+2. **Future Plans**: We reserve the right to introduce Paid Plans in the future. Pricing, features, and payment terms will be announced separately at that time.
+3. **Service Adjustments**: We may modify or discontinue the Free Service at any time.
 
 ## 6. Use of the Services
 - You are responsible for configuring the widget, providing accurate platform links, and ensuring that Customer Content complies with all applicable laws and platform policies.
@@ -48,7 +45,8 @@ You agree not to:
 5. use the Services to store or transmit infringing, libelous, or unlawful content;
 6. use automated tools to scrape, export, or harvest data in violation of privacy rules;
 7. reverse engineer or attempt to derive the source code of the Services except to the extent allowed by law;
-8. resell, sublicense, or frame the Services without our prior written consent.
+8. resell, sublicense, or frame the Services without our prior written consent;
+9. remove, obscure, hide, or modify the backlink included in the Free Service (e.g., the "報數據" link).
 
 We may investigate and take action, including suspension or termination, if we suspect violations of these Terms or abuse reports.
 
@@ -69,18 +67,16 @@ Use of the Services is subject to our [Privacy Policy](./privacy-policy.md) whic
 
 ## 14. Suspension and Termination
 We may suspend or terminate your access at any time if:
-- you materially breach these Terms or fail to pay fees;
+- you materially breach these Terms;
 - your use creates security or legal risk; or
 - we discontinue the Services.
-You may terminate by cancelling your Account. Upon termination, your access will cease and you remain responsible for outstanding fees. Sections that by their nature should survive termination (including Sections 7-18) will survive.
+You may terminate by ceasing to use the Services (for example, by removing the widget code from your site). Upon termination, your access will cease. Sections that by their nature should survive termination (including Sections 7-18) will survive.
 
 ## 15. Disclaimer
 The Services are provided "AS IS" and "AS AVAILABLE" without warranties of any kind, whether express, implied, or statutory, including implied warranties of merchantability, fitness for a particular purpose, or non-infringement. We do not guarantee uninterrupted or error-free operation, nor that the Services will meet your requirements.
 
 ## 16. Limitation of Liability
-To the fullest extent permitted by law, ToldYou and its affiliates, officers, directors, employees, and agents will not be liable for any indirect, incidental, special, consequential, or exemplary damages (including loss of profits, revenues, data, or goodwill) arising from your use of the Services, even if we have been advised of the possibility of such damages. Our total liability for any claim arising out of or related to the Services will not exceed the greater of: (a) the amounts paid by you to ToldYou in the 12 months preceding the claim, or (b) NT$10,000.
-
-Some jurisdictions do not allow limitations of liability, so certain limitations may not apply to you.
+To the fullest extent permitted by law, ToldYou and its affiliates, officers, directors, employees, and agents will not be liable for any indirect, incidental, special, consequential, or exemplary damages (including loss of profits, revenues, data, or goodwill) arising from your use of the Services, even if we have been advised of the possibility of such damages. Because the P1 stage of the Services is provided free of charge, our total liability for any claim arising out of or related to the Services will not exceed NT$1,000.
 
 ## 17. Indemnification
 You agree to indemnify, defend, and hold harmless ToldYou, its affiliates, officers, directors, employees, and agents from any claims, damages, liabilities, costs, and expenses (including reasonable attorneys' fees) arising from your Customer Content, your use of the Services, or your breach of these Terms.
