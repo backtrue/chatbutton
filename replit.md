@@ -170,6 +170,53 @@ configs table:
 
 ## Recent Changes
 
+### November 5, 2024 (PM) - Revolutionary 1-Line Widget Code
+
+**Major Simplification: From 200+ Lines to 1 Line**
+
+1. **Ultra-Simplified Embed Code:**
+   - Users now receive: `<script src="[host]/widget.js" data-config-id="[uuid]"></script>`
+   - Previous version: 200+ lines of inline JavaScript
+   - New version: 1 line (約 80-100 characters)
+   - Benefits: Easier to understand, copy, and install
+
+2. **Centralized Widget Loading:**
+   - Created `/widget.js` endpoint serving universal widget script
+   - Widget reads `data-config-id` attribute
+   - Fetches configuration from `/api/configs/:id` at runtime
+   - All widget logic centralized on server (future updates apply automatically)
+
+3. **Cross-Origin Fix:**
+   - Widget now derives API base URL from `script.src`
+   - Uses absolute URLs: `scriptSrc.replace(/\/widget\.js.*$/, '') + '/api/configs/:id'`
+   - Works correctly when embedded on external websites
+
+4. **Resend Email Integration:**
+   - Integrated Replit's Resend connector for reliable email delivery
+   - No manual API key management needed
+   - Email includes simplified embed code and installation instructions
+   - Note: Domain verification required for production (toldyou.co not yet verified)
+
+5. **Architecture Benefits:**
+   - Config stored in database with UUID
+   - Widget code becomes timeless (updates don't require re-embedding)
+   - Prepares for P2 SaaS features (user accounts, config editing)
+   - SEO backlink strategy intact ("報數據" at bottom)
+
+**Testing Results:**
+- ✅ E2E test verified full flow: form → database → email → simplified code
+- ✅ Widget correctly loads on external HTML pages
+- ✅ Cross-origin fetch working with absolute URLs
+- ✅ All interactions verified: expand/collapse, ESC, outside-click
+- ✅ Platform brand colors and custom main button color working
+- ✅ SEO backlink positioned correctly at bottom
+
+**Known Issues:**
+- Email domain verification: "toldyou.co domain is not verified" warning
+  - Email delivery may fail in production until domain verified in Resend
+  - Development/testing works fine (logs warning but continues)
+  - Action required: Verify domain in Resend dashboard before production use
+
 ### November 5, 2024 (PM) - Collapsible FAB Widget Redesign
 
 **Major Architecture Change: From Static Buttons to Collapsible FAB**
