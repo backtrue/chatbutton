@@ -70,7 +70,7 @@ export function generateUniversalWidgetScript(): string {
       line: 'https://line.me/R/ti/p/' + encodeURIComponent(value),
       messenger: 'https://m.me/' + encodeURIComponent(value),
       whatsapp: 'https://wa.me/' + encodeURIComponent(value),
-      instagram: 'https://ig.me/m/' + encodeURIComponent(value),
+      instagram: 'https://instagram.com/' + encodeURIComponent(value),
       phone: 'tel:' + value,
       email: 'mailto:' + value
     };

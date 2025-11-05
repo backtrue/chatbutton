@@ -24,8 +24,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Save to database first to get the config ID
       const config = await storage.createConfig(validatedData);
       
-      // Construct base URL from request
-      const baseUrl = `${req.protocol}://${req.get('host')}`;
+      // Construct base URL from request (force HTTPS in production)
+      const protocol = req.get('x-forwarded-proto') || req.protocol;
+      const baseUrl = `${protocol}://${req.get('host')}`;
       
       // Generate simplified embed code using the config ID
       const widgetCode = generateSimplifiedEmbedCode(config.id, baseUrl);
@@ -63,6 +64,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // GET /api/configs/:id - Get configuration JSON for widget
   app.get('/api/configs/:id', async (req, res) => {
     try {
+      // Enable CORS for widget embedding on external sites
+      res.header('Access-Control-Allow-Origin', '*');
+      res.header('Access-Control-Allow-Methods', 'GET');
+      
       const config = await storage.getConfigById(req.params.id);
       
       if (!config) {
@@ -88,6 +93,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // GET /widget.js - Serve universal widget script
   app.get('/widget.js', (req, res) => {
+    // Enable CORS for widget embedding on external sites
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET');
+    
     const script = generateUniversalWidgetScript();
     res.type('application/javascript');
     res.set('Cache-Control', 'public, max-age=3600'); // Cache for 1 hour
