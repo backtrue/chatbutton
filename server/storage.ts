@@ -1,38 +1,40 @@
-import { type User, type InsertUser } from "@shared/schema";
-import { randomUUID } from "crypto";
-
-// modify the interface with any CRUD methods
-// you might need
+// Reference: javascript_database blueprint
+import { configs, type Config, type InsertConfig } from "@shared/schema";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
 
 export interface IStorage {
-  getUser(id: string): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
+  createConfig(insertConfig: InsertConfig): Promise<Config>;
+  getConfigByEmail(email: string): Promise<Config | undefined>;
+  getConfigById(id: string): Promise<Config | undefined>;
 }
 
-export class MemStorage implements IStorage {
-  private users: Map<string, User>;
-
-  constructor() {
-    this.users = new Map();
+export class DatabaseStorage implements IStorage {
+  async createConfig(insertConfig: InsertConfig): Promise<Config> {
+    const [config] = await db
+      .insert(configs)
+      .values(insertConfig)
+      .returning();
+    return config;
   }
 
-  async getUser(id: string): Promise<User | undefined> {
-    return this.users.get(id);
+  async getConfigByEmail(email: string): Promise<Config | undefined> {
+    const [config] = await db
+      .select()
+      .from(configs)
+      .where(eq(configs.email, email))
+      .orderBy(configs.createdAt)
+      .limit(1);
+    return config || undefined;
   }
 
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
-  }
-
-  async createUser(insertUser: InsertUser): Promise<User> {
-    const id = randomUUID();
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
-    return user;
+  async getConfigById(id: string): Promise<Config | undefined> {
+    const [config] = await db
+      .select()
+      .from(configs)
+      .where(eq(configs.id, id));
+    return config || undefined;
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();
