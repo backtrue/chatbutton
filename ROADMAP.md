@@ -59,29 +59,20 @@
    - 若 Response Headers 未符合預期，請截圖並回報工程團隊，附上實際請求 URL。
    - 確保測試分頁未啟用任何會改寫快取的瀏覽器外掛。
 
-#### 1.4 Config ID 體驗優化
-- **目標**：讓使用者在成功頁、Email 及未來外掛流程中，更容易取得與複製 `config ID`
+#### 1.4 Config ID 體驗優化 ✅
+- **目標**：讓使用者在成功頁、Email 及外掛流程中，更容易取得與複製 `config ID`
 - **參考文件**：`attached_assets/configid.md`
-- **Home.tsx 儲存流程**：
-  - [ ] 在 `submitMutation.onSuccess` 中，與 `widgetCode`、`userEmail` 一同寫入 `sessionStorage.setItem('widgetConfigId', response.id)`
-- **Success.tsx 體驗**：
-  - [ ] 自 `sessionStorage` 讀取 `widgetConfigId`
-  - [ ] 加入 `copiedId` 狀態與 `copyConfigId` 函式，提供單獨複製 ID 的按鈕
-  - [ ] 以 Tabs 重構成功頁：
-    - [ ] `TabsList`：`WordPress / Shopify`（預設）與 `手動安裝 (HTML)` 兩個分頁
-    - [ ] `TabsContent value="plugin"`：顯示 Config ID、複製按鈕、外掛引導文字
-    - [ ] `TabsContent value="manual"`：沿用既有完整程式碼卡片與複製功能
-- **Email 通知更新**：
-  - [ ] 在 `sendCode` 中以 Regex 解析 `configId`（`data-config-id="..."`）並傳入 `generateEmailHTML`
-  - [ ] 調整 `generateEmailHTML` 函式簽名加入 `configId`
-  - [ ] 新增樣式與區塊：
-    - [ ] CSS `id-block` 樣式（淡藍底、等寬字體顯示 ID）
-    - [ ] 於 Email 內容加入「🚀 WordPress / Shopify 用戶」段落，列出 Config ID
-- **測試**：
-  - [ ] 送出表單 → 成功頁 WordPress/Shopify 分頁可正確複製 ID
-  - [ ] 刷新成功頁（sessionStorage 仍在）→ 保留 ID 顯示
-  - [ ] 寄送 Email → 驗證新區塊與 ID 顯示正確
-- **預期產出**：config ID 在前後台體驗統一，支援 P1.W / P1.S 安裝流程
+- **完成事項**：
+  - Home.tsx：在 `submitMutation.onSuccess` 中同步寫入 `sessionStorage.setItem('widgetConfigId', response.id)`，確保成功頁可立即存取。
+  - Success.tsx：
+    - 讀取 `widgetConfigId` 並提供 `copyConfigId` 按鈕，採水平輸入框＋等高複製鍵設計。
+    - Tab 介面改為 `手動安裝 (HTML)` 為預設頁籤，`WordPress / Shopify` 為第二頁籤。
+    - Plugin 分頁顯示 Config ID 與 WordPress / Shopify 指南；HTML 分頁顯示三行程式碼與 `<body>` 內嵌教學。
+  - Email：`sendCode` 以 Regex 擷取 `data-config-id`，`generateEmailHTML` 新增 Config ID 區塊（淡藍底）與 WordPress / Shopify 指引。
+- **驗證紀錄（2025-11-06）**：
+  - ✅ 成功頁 WordPress / Shopify 分頁可順利複製 Config ID，刷新後仍保留顯示。
+  - ✅ 寄送通知 Email，Config ID 淡藍區塊與指引文字顯示正常（參考附件截圖）。
+- **成果**：Config ID 在前端體驗與通知信件中皆可快速取得，支援 P1.W / P1.S 安裝流程。
 
 ---
 

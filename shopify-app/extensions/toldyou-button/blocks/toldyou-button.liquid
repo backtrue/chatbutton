@@ -1,0 +1,36 @@
+{% comment %}
+  ToldYou Button – Shopify App Embed Block
+  This block injects the hosted ToldYou Button widget onto storefront pages using a Config ID
+  provided by the main ToldYou Button web app.
+{% endcomment %}
+
+{% assign config_id = block.settings.config_id | strip %}
+{% assign widget_base_url = 'https://chatbutton.backtrue.com' %}
+{% assign widget_version = '1.0.0' %}
+
+{% if config_id != '' %}
+  <script
+    src="{{ widget_base_url }}/widget.js?v={{ widget_version }}"
+    data-config-id="{{ config_id }}"
+  ></script>
+{% endif %}
+
+{% schema %}
+{
+  "name": "ToldYou Button",
+  "target": "body",
+  "settings": [
+    {
+      "type": "text",
+      "id": "config_id",
+      "label": "ToldYou Button Config ID",
+      "info": "請前往 ToldYou Button 官網產生您的免費按鈕。完成後，將成功頁或 Email 中的 data-config-id (例如 a1b2c3d4-...) 貼上此處並儲存。"
+    }
+  ],
+  "presets": [
+    {
+      "name": "ToldYou Button"
+    }
+  ]
+}
+{% endschema %}
