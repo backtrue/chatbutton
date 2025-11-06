@@ -2,19 +2,29 @@
 
 client_id = "7a243e25588c24845ac78c83790794d6"
 name = "ToldYouButton"
-application_url = "https://shopify.dev/apps/default-app-home"
-embedded = true
+application_url = "https://button.toldyou.co/"
+embedded = false
 
 [build]
 automatically_update_urls_on_dev = true
-include_config_on_deploy = true
 
 [webhooks]
 api_version = "2026-01"
 
+[[webhooks.subscriptions]]
+compliance_topics = ["customers/data_request"]
+uri = "https://button.toldyou.co/webhooks/customers/data_request"
+
+[[webhooks.subscriptions]]
+compliance_topics = ["customers/redact"]
+uri = "https://button.toldyou.co/webhooks/customers/redact"
+
+[[webhooks.subscriptions]]
+compliance_topics = ["shop/redact"]
+uri = "https://button.toldyou.co/webhooks/shop/redact"
 [access_scopes]
-# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "read_products,write_products"
+# No authenticated Admin API scopes required for this app.
+scopes = ""
 
 [auth]
-redirect_urls = [ "https://shopify.dev/apps/default-app-home/api/auth" ]
+redirect_urls = []
