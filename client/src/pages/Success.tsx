@@ -17,6 +17,7 @@ export default function Success() {
   const { toast } = useToast();
   const [copied, setCopied] = useState(false);
   const [copiedId, setCopiedId] = useState(false);
+  const [activeTab, setActiveTab] = useState<'plugin' | 'manual'>('manual');
 
   // Retrieve data from sessionStorage to avoid exposing email in URL
   const email = sessionStorage.getItem('userEmail') || '';
@@ -112,13 +113,17 @@ export default function Success() {
         </div>
 
         {/* Code Block & Config ID Tabs */}
-        <Tabs defaultValue="plugin" className="mb-6">
+        <Tabs
+          value={activeTab}
+          onValueChange={(value: string) => setActiveTab(value as 'plugin' | 'manual')}
+          className="mb-6"
+        >
           <TabsList className="grid w-full grid-cols-2 bg-muted">
             <TabsTrigger value="plugin">WordPress / Shopify</TabsTrigger>
             <TabsTrigger value="manual">手動安裝 (HTML)</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="plugin" className="mt-4">
+          <TabsContent value="plugin" className="mt-4 space-y-4">
             <Card className="p-6 space-y-4">
               <div className="flex items-center gap-2">
                 <Clipboard className="w-5 h-5 text-primary" />
@@ -128,13 +133,12 @@ export default function Success() {
               <p className="text-sm text-muted-foreground">
                 請複製下方 <strong>Config ID</strong> 並貼到外掛或 App 的設定欄位中。
               </p>
-
-              <div className="relative">
+              <div className="flex items-center gap-2">
                 <Input
                   value={configId || ''}
                   readOnly
                   placeholder="尚未取得 Config ID，請返回上一頁重新生成"
-                  className="font-mono text-sm pr-12"
+                  className="font-mono text-sm h-10"
                   disabled={!configId}
                 />
                 <Button
@@ -142,11 +146,11 @@ export default function Success() {
                   size="icon"
                   variant="secondary"
                   onClick={copyConfigId}
-                  className="absolute top-1/2 right-1.5 -translate-y-1/2"
+                  className="h-10 w-10 shrink-0"
                   data-testid="button-copy-config-id"
                   disabled={!configId}
                 >
-                  {copiedId ? <Check className="w-4 h-4" /> : <Clipboard className="w-4 h-4" />}
+                  {copiedId ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                   <span className="sr-only">複製 Config ID</span>
                 </Button>
               </div>
@@ -157,9 +161,32 @@ export default function Success() {
                 </p>
               )}
             </Card>
+
+            <Card className="p-6">
+              <h3 className="text-lg font-semibold text-foreground mb-4">快速安裝指南</h3>
+              <div className="space-y-6">
+                <div className="border-l-4 border-primary pl-4">
+                  <h4 className="font-semibold text-foreground mb-2">WordPress 外掛</h4>
+                  <ol className="text-sm text-muted-foreground space-y-1 list-decimal list-inside">
+                    <li>登入 WordPress 後台 → 「外掛」 → 「ToldYou Button」。</li>
+                    <li>貼上上方 Config ID 並點擊「儲存」。</li>
+                    <li>回到網站前台重新整理頁面檢查按鈕。</li>
+                  </ol>
+                </div>
+
+                <div className="border-l-4 border-green-500 pl-4">
+                  <h4 className="font-semibold text-foreground mb-2">Shopify App</h4>
+                  <ol className="text-sm text-muted-foreground space-y-1 list-decimal list-inside">
+                    <li>登入 Shopify 後台 → 「Apps」 → 「ToldYou Button」。</li>
+                    <li>貼上上方 Config ID 並儲存設定。</li>
+                    <li>重新整理商店前台確認按鈕顯示。</li>
+                  </ol>
+                </div>
+              </div>
+            </Card>
           </TabsContent>
 
-          <TabsContent value="manual" className="mt-4">
+          <TabsContent value="manual" className="mt-4 space-y-4">
             <Card className="p-6">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
@@ -193,48 +220,21 @@ export default function Success() {
                 </pre>
               </div>
             </Card>
+            <Card className="p-6">
+              <h3 className="text-lg font-semibold text-foreground mb-4">快速安裝指南</h3>
+              <div className="border-l-4 border-orange-500 pl-4">
+                <h4 className="font-semibold text-foreground mb-2">純 HTML 網站</h4>
+                <ol className="text-sm text-muted-foreground space-y-1 list-decimal list-inside">
+                  <li>開啟您的 HTML 檔案（通常是 index.html）。</li>
+                  <li>
+                    在 <code>&lt;/body&gt;</code> 標籤前貼上上方程式碼。
+                  </li>
+                  <li>儲存檔案並上傳至伺服器後重新整理頁面。</li>
+                </ol>
+              </div>
+            </Card>
           </TabsContent>
         </Tabs>
-
-        {/* Installation Instructions */}
-        <Card className="p-6 mb-6">
-          <h3 className="text-lg font-semibold text-foreground mb-4">快速安裝指南</h3>
-          
-          <div className="space-y-6">
-            {/* WordPress */}
-            <div className="border-l-4 border-primary pl-4">
-              <h4 className="font-semibold text-foreground mb-2">WordPress 網站</h4>
-              <ol className="text-sm text-muted-foreground space-y-1 list-decimal list-inside">
-                <li>登入 WordPress 管理後台</li>
-                <li>前往「外觀」→「自訂」→「額外的 CSS/JS」</li>
-                <li>貼上程式碼到「頁尾程式碼」區域</li>
-                <li>點擊「發布」儲存</li>
-              </ol>
-            </div>
-
-            {/* Shopify */}
-            <div className="border-l-4 border-green-500 pl-4">
-              <h4 className="font-semibold text-foreground mb-2">Shopify 商店</h4>
-              <ol className="text-sm text-muted-foreground space-y-1 list-decimal list-inside">
-                <li>登入 Shopify 管理後台</li>
-                <li>前往「網路商店」→「佈景主題」→「編輯程式碼」</li>
-                <li>找到 theme.liquid 檔案</li>
-                <li>在 <code className="bg-gray-100 px-1 rounded">&lt;/body&gt;</code> 標籤前貼上程式碼</li>
-                <li>點擊「儲存」</li>
-              </ol>
-            </div>
-
-            {/* HTML */}
-            <div className="border-l-4 border-orange-500 pl-4">
-              <h4 className="font-semibold text-foreground mb-2">純 HTML 網站</h4>
-              <ol className="text-sm text-muted-foreground space-y-1 list-decimal list-inside">
-                <li>開啟您的 HTML 檔案（通常是 index.html）</li>
-                <li>在 <code className="bg-gray-100 px-1 rounded">&lt;/body&gt;</code> 標籤前貼上程式碼</li>
-                <li>儲存檔案並上傳至伺服器</li>
-              </ol>
-            </div>
-          </div>
-        </Card>
 
         {/* Next Steps */}
         <Card className="p-6 bg-blue-50 border-blue-200">
