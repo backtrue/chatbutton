@@ -77,6 +77,7 @@ export default function Home() {
       // Store data in sessionStorage for success page
       sessionStorage.setItem('widgetCode', response.code);
       sessionStorage.setItem('userEmail', variables.email);
+      sessionStorage.setItem('widgetConfigId', response.id);
 
       // Navigate to success page using wouter (avoids page reload)
       setLocation('/success');

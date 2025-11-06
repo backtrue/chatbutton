@@ -42,7 +42,9 @@ export class ResendEmailService implements EmailService {
 
   async sendCode(email: string, code: string, config: ButtonConfig, lang: string): Promise<void> {
     const subject = this.getSubject(lang);
-    const html = this.generateEmailHTML(code, config, lang);
+    const configIdMatch = code.match(/data-config-id="([^"]+)"/);
+    const configId = configIdMatch ? configIdMatch[1] : '';
+    const html = this.generateEmailHTML(code, config, lang, configId);
 
     const { client, fromEmail } = await this.getResendClient();
 
@@ -67,7 +69,7 @@ export class ResendEmailService implements EmailService {
     return subjects[lang] || subjects['zh-TW'];
   }
 
-  private generateEmailHTML(code: string, config: ButtonConfig, lang: string): string {
+  private generateEmailHTML(code: string, config: ButtonConfig, lang: string, configId: string): string {
     // Generate email HTML with installation instructions
     return `
 <!DOCTYPE html>
@@ -80,6 +82,8 @@ export class ResendEmailService implements EmailService {
     h2 { color: #1e40af; font-size: 18px; margin-top: 30px; margin-bottom: 15px; }
     .code-block { background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 6px; padding: 15px; margin: 20px 0; overflow-x: auto; }
     .code-block code { font-family: 'Courier New', Consolas, monospace; font-size: 13px; color: #1f2937; display: block; white-space: pre-wrap; word-break: break-all; }
+    .id-block { background: #dbeafe; border: 1px solid #bfdbfe; border-radius: 6px; padding: 15px; margin: 20px 0; }
+    .id-block code { font-family: 'Courier New', Consolas, monospace; font-size: 14px; color: #1e3a8a; display: block; white-space: nowrap; overflow-x: auto; padding-bottom: 5px; }
     .instructions { background: #f9fafb; border-left: 4px solid #2563eb; padding: 15px; margin: 15px 0; }
     .instructions ol { margin: 10px 0; padding-left: 20px; }
     .instructions li { margin: 8px 0; }
@@ -93,6 +97,13 @@ export class ResendEmailService implements EmailService {
   <p>感謝您使用 <strong>ToldYou Button</strong>！以下是您的專屬按鈕程式碼。</p>
   
   <p><span class="badge">✓ 完全免費</span> <span class="badge">✓ 無限使用</span> <span class="badge">✓ 超簡短程式碼</span></p>
+
+  <h2>🚀 WordPress / Shopify 用戶 (建議)</h2>
+  <p style="font-size: 15px;">如果您使用 ToldYou Button 的 WordPress 外掛或 Shopify App，請複製下方 <strong>Config ID</strong> 並貼到外掛設定中。</p>
+  <div class="id-block">
+    <p style="margin:0 0 10px 0; font-size: 14px; color: #1e3a8a;">您的 Config ID：</p>
+    <code>${this.escapeHtml(configId || '尚未偵測到 Config ID')}</code>
+  </div>
 
   <h2>📋 您的程式碼（只有 3 行！）</h2>
   <div class="code-block">

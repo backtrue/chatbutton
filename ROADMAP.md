@@ -59,6 +59,30 @@
    - 若 Response Headers 未符合預期，請截圖並回報工程團隊，附上實際請求 URL。
    - 確保測試分頁未啟用任何會改寫快取的瀏覽器外掛。
 
+#### 1.4 Config ID 體驗優化
+- **目標**：讓使用者在成功頁、Email 及未來外掛流程中，更容易取得與複製 `config ID`
+- **參考文件**：`attached_assets/configid.md`
+- **Home.tsx 儲存流程**：
+  - [ ] 在 `submitMutation.onSuccess` 中，與 `widgetCode`、`userEmail` 一同寫入 `sessionStorage.setItem('widgetConfigId', response.id)`
+- **Success.tsx 體驗**：
+  - [ ] 自 `sessionStorage` 讀取 `widgetConfigId`
+  - [ ] 加入 `copiedId` 狀態與 `copyConfigId` 函式，提供單獨複製 ID 的按鈕
+  - [ ] 以 Tabs 重構成功頁：
+    - [ ] `TabsList`：`WordPress / Shopify`（預設）與 `手動安裝 (HTML)` 兩個分頁
+    - [ ] `TabsContent value="plugin"`：顯示 Config ID、複製按鈕、外掛引導文字
+    - [ ] `TabsContent value="manual"`：沿用既有完整程式碼卡片與複製功能
+- **Email 通知更新**：
+  - [ ] 在 `sendCode` 中以 Regex 解析 `configId`（`data-config-id="..."`）並傳入 `generateEmailHTML`
+  - [ ] 調整 `generateEmailHTML` 函式簽名加入 `configId`
+  - [ ] 新增樣式與區塊：
+    - [ ] CSS `id-block` 樣式（淡藍底、等寬字體顯示 ID）
+    - [ ] 於 Email 內容加入「🚀 WordPress / Shopify 用戶」段落，列出 Config ID
+- **測試**：
+  - [ ] 送出表單 → 成功頁 WordPress/Shopify 分頁可正確複製 ID
+  - [ ] 刷新成功頁（sessionStorage 仍在）→ 保留 ID 顯示
+  - [ ] 寄送 Email → 驗證新區塊與 ID 顯示正確
+- **預期產出**：config ID 在前後台體驗統一，支援 P1.W / P1.S 安裝流程
+
 ---
 
 ## 📋 優先順序 2：P2 SaaS 升級架構
@@ -153,6 +177,69 @@
     - [ ] 編輯設定 → 不更新 embed code → 驗證 widget 自動更新
 - **預期產出**：使用者編輯設定無需重新部署 embed code
 
+#### 2.6 P1.W / P1.S 外掛整合
+- **目標**：提供 WordPress 外掛與 Shopify App 作為「ID 貼上器」，支援 GTM 推廣並維持低維運成本
+- **參考文件**：`attached_assets/P1W-P1S.md`
+- **架構原則**：P1 Web App (Home.tsx) 為唯一設定中心，外掛/App 只負責貼入 data-config-id 並載入 widget
+- **共用準備**：
+  - [ ] 在成功頁與 FAQ 文件化取得 data-config-id 的步驟（Email / success 頁面）
+  - [ ] 提供統一腳本範例 `<script src="https://your-domain/widget.js?v={VERSION}" data-config-id="{ID}"></script>`
+  - [ ] 準備行銷素材：Web App UI 截圖（PlatformCard、ColorPicker 等）供商店上架使用
+- **P1.W (WordPress Plugin) MVP**
+  - [ ] 專案結構：建立 `wp-plugin/` 目錄或獨立 repo
+  - [ ] 後台 UI：於「設定」新增子選單「ToldYou Button」，頁面只有一個文字輸入（config ID）與儲存按鈕
+  - [ ] 提示文案：明確指引用戶前往 P1 網站生成資料，貼上成功頁的 data-config-id（例：a1b2c3d4-...）
+  - [ ] 後端邏輯：
+    - [ ] 註冊設定欄位 `toldyou_button_config_id`
+    - [ ] 使用 `admin_menu` / `admin_init` 建立設定頁與儲存流程
+    - [ ] `add_action('wp_footer', ...)` 讀取 `get_option`，若存在 ID 則輸出 widget script（含版本 query 與 data-config-id）
+  - [ ] 測試：
+    - [ ] 貼上有效 ID → 前台載入 ToldYou Button
+    - [ ] 清空 ID → 不輸出 script，避免空白載入
+- **P1.S (Shopify App) MVP**
+  - [ ] 專案結構：建立 `shopify-app/` 目錄（可使用 Shopify CLI scaffold）
+  - [ ] 使用 App Embed Block（無需獨立後台頁面）
+  - [ ] schema 設定：
+    - [ ] 單一 `type: "text"` 設定 `id: "config_id"`，label 為「ToldYou Button Config ID」
+    - [ ] `info` 提示文案與 WP 相同
+  - [ ] Liquid 邏輯：
+    - [ ] `{%- assign config_id = block.settings.config_id -%}`
+    - [ ] 若存在 → 輸出 `<script src="...widget.js?v=..." data-config-id="{{ config_id }}"></script>`
+  - [ ] 測試：
+    - [ ] 主題編輯器啟用 App Embed → 輸入 ID → 頁面載入按鈕
+    - [ ] 未輸入 ID → 不載入 script
+- **上架與行銷**：
+  - [ ] 撰寫商店描述：清楚列出三步驟（安裝 → 產生 ID → 貼上儲存）
+  - [ ] 準備審核資料（圖示、支援信箱、隱私條款連結）
+  - [ ] 規劃版本號、更新流程與 Changelog
+- **預期產出**：
+  - WordPress 外掛與 Shopify App 皆可透過貼上 ID 輕鬆載入 ToldYou Button
+  - 完整上架素材與操作說明，支援中文教學渠道推廣
+
+#### 2.7 Config ID 體驗優化
+- **目標**：讓使用者在成功頁、Email 及未來外掛流程中，更容易取得與複製 `config ID`
+- **參考文件**：`attached_assets/configid.md`
+- **Home.tsx 儲存流程**：
+  - [ ] 在 `submitMutation.onSuccess` 中，與 `widgetCode`、`userEmail` 一同寫入 `sessionStorage.setItem('widgetConfigId', response.id)`
+- **Success.tsx 體驗**：
+  - [ ] 自 `sessionStorage` 讀取 `widgetConfigId`
+  - [ ] 加入 `copiedId` 狀態與 `copyConfigId` 函式，提供單獨複製 ID 的按鈕
+  - [ ] 以 Tabs 重構成功頁：
+    - [ ] `TabsList`：`WordPress / Shopify`（預設）與 `手動安裝 (HTML)` 兩個分頁
+    - [ ] `TabsContent value="plugin"`：顯示 Config ID、複製按鈕、外掛引導文字
+    - [ ] `TabsContent value="manual"`：沿用既有完整程式碼卡片與複製功能
+- **Email 通知更新**：
+  - [ ] 在 `sendCode` 中以 Regex 解析 `configId`（`data-config-id="..."`）並傳入 `generateEmailHTML`
+  - [ ] 調整 `generateEmailHTML` 函式簽名加入 `configId`
+  - [ ] 新增樣式與區塊：
+    - [ ] CSS `id-block` 樣式（淡藍底、等寬字體顯示 ID）
+    - [ ] 於 Email 內容加入「🚀 WordPress / Shopify 用戶」段落，列出 Config ID
+- **測試**：
+  - [ ] 送出表單 → 成功頁 WordPress/Shopify 分頁可正確複製 ID
+  - [ ] 刷新成功頁（sessionStorage 仍在）→ 保留 ID 顯示
+  - [ ] 寄送 Email → 驗證新區塊與 ID 顯示正確
+- **預期產出**：config ID 在前後台體驗統一，支援 P1.W / P1.S 安裝流程
+
 ---
 
 ## 📋 優先順序 3：P3 多語擴充
@@ -164,11 +251,14 @@
 ### 任務拆解
 
 #### 3.1 前台語系選擇 UI
-- **目標**：使用者在表單頂部可選擇語言（繁中/日/英）
+- **目標**：使用者可切換網站語系（初期支援 zh-TW / ja / en）
 - **檔案**：`client/src/pages/Home.tsx`、`client/src/lib/i18n.ts`
 - **工作項**：
-  - [ ] 新增語系選擇器（下拉或按鈕組）
-  - [ ] 儲存選擇至 localStorage
+  - [ ] 建立語系 state/context 與預設語言判斷
+  - [ ] 支援透過 URL 參數 `?lang=` 決定語言（未提供時 fallback 至預設）
+  - [ ] 語系切換 UI（導覽列或頁面頂部）
+  - [ ] 語言設定與 localStorage 同步（記住使用者選擇）
+  - [ ] 自動依語言載入對應翻譯文案
   - [ ] 表單標籤、placeholder、提示文字根據語系切換
   - [ ] 測試：
     - [ ] 切換語系 → 表單文字更新
