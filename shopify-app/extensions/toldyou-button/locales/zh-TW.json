@@ -1,0 +1,11 @@
+{
+  "toldyou_button": {
+    "name": "ToldYou Button",
+    "settings": {
+      "config_id": {
+        "label": "ToldYou Button Config ID",
+        "info": "請前往 ToldYou Button 網站產生 Config ID，貼上後即可在前台載入聊天按鈕。"
+      }
+    }
+  }
+}

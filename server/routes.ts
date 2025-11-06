@@ -4,6 +4,7 @@ import { storage } from "./storage";
 import { createEmailService } from "./email";
 import { generateWidgetCode, generateSimplifiedEmbedCode } from "./widget";
 import { generateUniversalWidgetScript } from "./widget-loader";
+import { registerShopifyComplianceWebhooks } from "./shopify-webhooks";
 import { insertConfigSchema, buttonConfigSchema } from "@shared/schema";
 import type { ButtonConfig } from "@shared/schema";
 import type { Language } from "../client/src/lib/i18n";
@@ -106,6 +107,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
     res.send(script);
   });
+
+  registerShopifyComplianceWebhooks(app);
 
   const httpServer = createServer(app);
 

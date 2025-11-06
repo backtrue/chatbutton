@@ -1,0 +1,20 @@
+{
+  "name": "toldyou-button-shopify-app",
+  "version": "0.1.0",
+  "description": "ToldYou Button – Lightweight chat widget integration for Shopify",
+  "type": "module",
+  "scripts": {
+    "dev": "shopify app dev",
+    "build": "shopify app build",
+    "deploy": "shopify app deploy",
+    "release": "shopify app release"
+  },
+  "dependencies": {
+    "@shopify/app": "^3.0.0",
+    "@shopify/cli": "^3.0.0"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

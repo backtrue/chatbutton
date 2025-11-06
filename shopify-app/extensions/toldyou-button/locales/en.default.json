@@ -1,0 +1,11 @@
+{
+  "toldyou_button": {
+    "name": "ToldYou Button",
+    "settings": {
+      "config_id": {
+        "label": "ToldYou Button Config ID",
+        "info": "Paste the Config ID generated from the ToldYouButton web app to load the widget on your storefront."
+      }
+    }
+  }
+}

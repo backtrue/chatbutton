@@ -174,7 +174,8 @@
 - **架構原則**：P1 Web App (Home.tsx) 為唯一設定中心，外掛/App 只負責貼入 data-config-id 並載入 widget
 - **共用準備**：
   - [ ] 在成功頁與 FAQ 文件化取得 data-config-id 的步驟（Email / success 頁面）
-  - [ ] 提供統一腳本範例 `<script src="https://your-domain/widget.js?v={VERSION}" data-config-id="{ID}"></script>`
+  - [ ] 提供統一腳本範例 `<script src="https://button.toldyou.co/widget.js?v={VERSION}" data-config-id="{ID}"></script>`
+  - [x] 記錄正式環境 widget base URL：`https://button.toldyou.co`
   - [ ] 準備行銷素材：Web App UI 截圖（PlatformCard、ColorPicker 等）供商店上架使用
 - **P1.W (WordPress Plugin) MVP**
   - [ ] 專案結構：建立 `wp-plugin/` 目錄或獨立 repo

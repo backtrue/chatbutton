@@ -1,0 +1,7 @@
+name = "ToldYou Button"
+handle = "toldyou-button"
+uid = "9478af15-8894-2ec4-3adc-4a0d307ff7da9821efa6"
+type = "theme_app_extension"
+
+[config]
+api_version = "2024-10"

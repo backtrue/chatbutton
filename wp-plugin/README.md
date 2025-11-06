@@ -1,6 +1,6 @@
-# ToldYou Button – WordPress Plugin (P1.W MVP)
+# ToldYouButton – WordPress Plugin (P1.W MVP)
 
-This folder contains the minimal WordPress plugin that bridges a ToldYou Button **Config ID** into any WordPress site by injecting the hosted `widget.js` script at the footer.
+This folder contains the minimal WordPress plugin that bridges a ToldYouButton **Config ID** into any WordPress site by injecting the hosted `widget.js` script at the footer.
 
 ## Files
 
@@ -9,14 +9,14 @@ This folder contains the minimal WordPress plugin that bridges a ToldYou Button 
 ## Getting Started
 
 1. Update the constants at the top of `toldyou-button.php` if needed:
-   - `TOLDYOU_BUTTON_WIDGET_BASE_URL` – base domain serving `widget.js` (default: `https://chatbutton.backtrue.com`).
+   - `TOLDYOU_BUTTON_WIDGET_BASE_URL` – base domain serving `widget.js` (default: `https://button.toldyou.co`).
    - `TOLDYOU_BUTTON_WIDGET_VERSION` – query parameter appended as `?v=...` for cache busting.
 2. Zip the folder as `toldyou-button.zip`.
 3. Upload or copy the plugin to WordPress:
    - **Option A:** WordPress Admin → Plugins → Add New → Upload Plugin → choose the zip and install.
    - **Option B:** Copy the folder to `/wp-content/plugins/` in your environment.
-4. Activate **ToldYou Button** in the Plugins list.
-5. Navigate to **Settings → ToldYou Button**, paste the Config ID from the ToldYou web app success page/email, and click Save.
+4. Activate **ToldYouButton** in the Plugins list.
+5. Navigate to **Settings → ToldYouButton**, paste the Config ID from the ToldYouButton web app success page/email, and click Save.
 
 ## Expected behaviour
 
