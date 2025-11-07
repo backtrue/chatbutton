@@ -7,6 +7,7 @@ import {
   readLanguageCookie,
 } from "./locale";
 import { isSupportedLanguage } from "@shared/language";
+import { getLanguageFromPath } from "@shared/homeMeta";
 import type { Language } from "@shared/language";
 
 const app = express();
@@ -31,8 +32,9 @@ app.use((req, res, next) => {
       ? (req.query.lang as Language)
       : null;
   const detection = detectLanguageFromRequest(req);
+  const pathLang = getLanguageFromPath(req.path);
 
-  const selectedLang: Language = queryLang ?? cookieLang ?? detection.lang;
+  const selectedLang: Language = pathLang ?? queryLang ?? cookieLang ?? detection.lang;
 
   (req as Request & { preferredLanguage?: Language }).preferredLanguage = selectedLang;
   res.locals.initialLang = selectedLang;

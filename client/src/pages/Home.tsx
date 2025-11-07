@@ -42,6 +42,21 @@ import {
   getLanguageOptions,
   type Language,
 } from '@shared/language';
+import { buildLocalizedPath } from '@shared/homeMeta';
+
+function updateMetaTag(name: string, content: string) {
+  if (typeof document === 'undefined') {
+    return;
+  }
+
+  let tag = document.querySelector(`meta[name="${name}"]`) as HTMLMetaElement | null;
+  if (!tag) {
+    tag = document.createElement('meta');
+    tag.name = name;
+    document.head.appendChild(tag);
+  }
+  tag.content = content;
+}
 
 type PlatformFormValues = Partial<Record<PlatformId, string>>;
 
@@ -128,6 +143,13 @@ export default function Home() {
   useEffect(() => {
     void form.trigger();
   }, [copy, form]);
+
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      document.title = copy.metaTitle;
+    }
+    updateMetaTag('description', copy.metaDescription);
+  }, [copy.metaDescription, copy.metaTitle]);
 
   const [selectedPlatforms, setSelectedPlatforms] = useState<Set<PlatformId>>(() => {
     const initial = new Set<PlatformId>();
@@ -216,7 +238,7 @@ export default function Home() {
       sessionStorage.setItem('userEmail', formData.email.trim());
       sessionStorage.setItem('widgetConfigId', response.id);
 
-      setLocation('/success');
+      setLocation(buildLocalizedPath('/success', language));
     } catch (error) {
       console.error('[Home] Failed to submit config', error);
       toast({

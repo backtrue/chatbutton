@@ -12,6 +12,8 @@ export const PLATFORM_IDS = [
 export type PlatformId = (typeof PLATFORM_IDS)[number];
 
 export type HomeCopy = {
+  metaTitle: string;
+  metaDescription: string;
   heroTitle: string;
   tagline: string;
   freeBadgeLabel: string;
@@ -130,6 +132,9 @@ export type SuccessCopy = {
 
 const HOME_COPY: Record<Language, HomeCopy> = {
   "zh-TW": {
+    metaTitle: "提升轉換率的客服聊天入口 | ToldYou Button",
+    metaDescription:
+      "想提高轉換率、降低流失？ToldYou Button 幫你在網站上打造「想聊就聊」的客服入口。安裝只要 1 行程式碼，即可快速串連 LINE、Messenger、WhatsApp 等渠道，不再錯過潛在客戶。",
     heroTitle: "ToldYou Button",
     tagline: "一分鐘完成多平台客服按鈕設定",
     freeBadgeLabel: "完全免費",
@@ -205,6 +210,9 @@ const HOME_COPY: Record<Language, HomeCopy> = {
     },
   },
   en: {
+    metaTitle: "Get Your Button Free (Blazing Fast & No Sign-Up) | ToldYouButton",
+    metaDescription:
+      "ToldYouButton is the simply powerful free chat button. Blazing fast, no sign-up, and 1-minute setup. Connect with customers via WhatsApp & Instagram instantly. Why pay for slow, complex tools? Get your free widget now.",
     heroTitle: "ToldYou Button",
     tagline: "Set up your multi-channel support button in under a minute",
     freeBadgeLabel: "100% Free",
@@ -280,6 +288,9 @@ const HOME_COPY: Record<Language, HomeCopy> = {
     },
   },
   ja: {
+    metaTitle: "CVRを上げる、“スタッフにつながる”ボタン | ToldYouButton",
+    metaDescription:
+      "問い合わせ率を上げたい？離脱を減らしたい？\nToldYouボタンは、サイトに「話しかけたくなる接点」をつくる簡単導入ツール。\nわずか1行のコードで、コンバージョンを逃しません。",
     heroTitle: "ToldYou Button",
     tagline: "1 分以内に複数チャネルのサポートボタンを設定できます",
     freeBadgeLabel: "完全無料",

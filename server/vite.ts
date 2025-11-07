@@ -5,8 +5,50 @@ import { createServer as createViteServer, createLogger } from "vite";
 import { type Server } from "http";
 import viteConfig from "../vite.config";
 import { nanoid } from "nanoid";
+import type { Language } from "@shared/language";
+import {
+  HOME_META,
+  LANGUAGE_HTML_TAG,
+  getHomeAlternateLinks,
+  getLanguageFromPath,
+  isHomePath,
+} from "@shared/homeMeta";
 
 const viteLogger = createLogger();
+
+type InjectOptions = {
+  lang: Language;
+  path: string;
+  origin: string;
+};
+
+function sanitizeDescription(description: string): string {
+  return description.replace(/\s+\n\s+/g, " ").replace(/\s{2,}/g, " ").trim();
+}
+
+function renderAlternateLinks(origin: string): string {
+  const links = getHomeAlternateLinks(origin);
+  return links
+    .map(({ href, hreflang }) => `    <link rel="alternate" hreflang="${hreflang}" href="${href}" />`)
+    .join("\n");
+}
+
+function injectLocalizedMeta(template: string, { lang, path, origin }: InjectOptions): string {
+  const resolvedLang: Language = HOME_META[lang] ? lang : "en";
+  const meta = HOME_META[resolvedLang];
+  const htmlLang = LANGUAGE_HTML_TAG[resolvedLang] ?? "en";
+  const description = sanitizeDescription(meta.description);
+  const canonicalUrl = new URL(path, origin).toString();
+  const alternateMarkup = isHomePath(path) ? renderAlternateLinks(origin) : "";
+
+  return template
+    .replace(/__TOLDYOU_HTML_LANG__/g, htmlLang)
+    .replace(/__TOLDYOU_META_TITLE__/g, meta.title)
+    .replace(/__TOLDYOU_META_DESCRIPTION__/g, description)
+    .replace(/__TOLDYOU_INITIAL_LANG__/g, resolvedLang)
+    .replace(/__TOLDYOU_CANONICAL_URL__/g, canonicalUrl)
+    .replace("<!--__TOLDYOU_ALTERNATE_LINKS__-->", alternateMarkup);
+}
 
 export function log(message: string, source = "express") {
   const formattedTime = new Date().toLocaleTimeString("en-US", {
@@ -58,7 +100,16 @@ export async function setupVite(app: Express, server: Server) {
         `src="/src/main.tsx"`,
         `src="/src/main.tsx?v=${nanoid()}"`,
       );
-      const page = await vite.transformIndexHtml(url, template);
+      const transformed = await vite.transformIndexHtml(url, template);
+      const protocol = (req.get("x-forwarded-proto") as string | undefined) ?? req.protocol;
+      const host = req.get("host") ?? "localhost";
+      const origin = `${protocol}://${host}`;
+      const lang = (res.locals.initialLang as Language | undefined) ?? getLanguageFromPath(req.path) ?? "en";
+      const page = injectLocalizedMeta(transformed, {
+        lang,
+        path: req.path,
+        origin,
+      });
       res.status(200).set({ "Content-Type": "text/html" }).end(page);
     } catch (e) {
       vite.ssrFixStacktrace(e as Error);
@@ -79,7 +130,20 @@ export function serveStatic(app: Express) {
   app.use(express.static(distPath));
 
   // fall through to index.html if the file doesn't exist
-  app.use("*", (_req, res) => {
-    res.sendFile(path.resolve(distPath, "index.html"));
+  const indexTemplate = fs.readFileSync(path.resolve(distPath, "index.html"), "utf-8");
+
+  app.use("*", (req, res) => {
+    const protocol = (req.get("x-forwarded-proto") as string | undefined) ?? req.protocol;
+    const host = req.get("host") ?? "localhost";
+    const origin = `${protocol}://${host}`;
+    const lang = (res.locals.initialLang as Language | undefined) ?? getLanguageFromPath(req.path) ?? "en";
+
+    const page = injectLocalizedMeta(indexTemplate, {
+      lang,
+      path: req.path,
+      origin,
+    });
+
+    res.status(200).set({ "Content-Type": "text/html" }).end(page);
   });
 }

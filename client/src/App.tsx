@@ -10,11 +10,18 @@ import TermsZhTWPage from "@/pages/legal/terms.zh-TW";
 import PrivacyZhTWPage from "@/pages/legal/privacy.zh-TW";
 import { LanguageProvider } from "@/language/language-context";
 
+const HOME_ROUTES = ["/", "/tw", "/jp"] as const;
+const SUCCESS_ROUTES = ["/success", "/tw/success", "/jp/success"] as const;
+
 function Router() {
   return (
     <Switch>
-      <Route path="/" component={Home} />
-      <Route path="/success" component={Success} />
+      {HOME_ROUTES.map((path) => (
+        <Route key={path} path={path} component={Home} />
+      ))}
+      {SUCCESS_ROUTES.map((path) => (
+        <Route key={path} path={path} component={Success} />
+      ))}
       <Route path="/legal/terms" component={TermsZhTWPage} />
       <Route path="/legal/privacy" component={PrivacyZhTWPage} />
       <Route component={NotFound} />

@@ -16,6 +16,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/language/language-context';
 import { getHomeCopy, getSuccessCopy } from '@/language/translations';
 import { getLanguageOptions, type Language } from '@shared/language';
+import { buildLocalizedPath } from '@shared/homeMeta';
 
 type SuccessTab = 'plugin' | 'manual';
 
@@ -83,7 +84,7 @@ export default function Success() {
   };
 
   if (!code || !email) {
-    setLocation('/');
+    setLocation(buildLocalizedPath('/', language));
     return null;
   }
 
@@ -96,7 +97,7 @@ export default function Success() {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => setLocation('/')}
+                onClick={() => setLocation(buildLocalizedPath('/', language))}
                 className="gap-2"
                 data-testid="button-back"
               >
@@ -283,7 +284,7 @@ export default function Success() {
           </p>
           <div className="flex flex-col sm:flex-row gap-3">
             <Button
-              onClick={() => setLocation('/')}
+              onClick={() => setLocation(buildLocalizedPath('/', language))}
               variant="default"
               data-testid="button-create-another"
             >
