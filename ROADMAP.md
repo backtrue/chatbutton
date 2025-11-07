@@ -1,6 +1,6 @@
 # ToldYou Button 開發路線圖 & 任務追蹤
 
-**最後更新**：2025-11-05  
+**最後更新**：2025-11-07  
 **目前階段**：P1 MVP 完成 → P2/P3 規劃中
 
 ---
@@ -19,7 +19,7 @@
 - **工作項**：
   - [x] 在 `generateSimplifiedEmbedCode` 加入版本參數（例如 `?v=1.0.0`）@server/widget.ts#1-105
   - [x] 版本號從環境變數（`WIDGET_VERSION`、`WIDGET_BUILD_ID`、`COMMIT_SHA`、`npm_package_version`）讀取，回退 `1.0.0`@server/version.ts#1-28
-  - [ ] 測試：確認 embed code 包含版本號（於 /api/configs 回傳的 code 中檢查 `?v=`）
+  - [x] 測試：確認 embed code 包含版本號（於 /api/configs 回傳的 code 中檢查 `?v=`）
 - **預期產出**：`<script src="...widget.js?v=1.0.0" data-config-id="...">`
 
 #### 1.2 調整 widget.js 快取策略
@@ -173,35 +173,35 @@
 - **參考文件**：`attached_assets/P1W-P1S.md`
 - **架構原則**：P1 Web App (Home.tsx) 為唯一設定中心，外掛/App 只負責貼入 data-config-id 並載入 widget
 - **共用準備**：
-  - [ ] 在成功頁與 FAQ 文件化取得 data-config-id 的步驟（Email / success 頁面）
-  - [ ] 提供統一腳本範例 `<script src="https://button.toldyou.co/widget.js?v={VERSION}" data-config-id="{ID}"></script>`
+  - [x] 在成功頁與 FAQ 文件化取得 data-config-id 的步驟（Email / success 頁面）
+  - [x] 提供統一腳本範例 `<script src="https://button.toldyou.co/widget.js?v={VERSION}" data-config-id="{ID}"></script>`
   - [x] 記錄正式環境 widget base URL：`https://button.toldyou.co`
   - [ ] 準備行銷素材：Web App UI 截圖（PlatformCard、ColorPicker 等）供商店上架使用
 - **P1.W (WordPress Plugin) MVP**
-  - [ ] 專案結構：建立 `wp-plugin/` 目錄或獨立 repo
-  - [ ] 後台 UI：於「設定」新增子選單「ToldYou Button」，頁面只有一個文字輸入（config ID）與儲存按鈕
-  - [ ] 提示文案：明確指引用戶前往 P1 網站生成資料，貼上成功頁的 data-config-id（例：a1b2c3d4-...）
-  - [ ] 後端邏輯：
-    - [ ] 註冊設定欄位 `toldyou_button_config_id`
-    - [ ] 使用 `admin_menu` / `admin_init` 建立設定頁與儲存流程
-    - [ ] `add_action('wp_footer', ...)` 讀取 `get_option`，若存在 ID 則輸出 widget script（含版本 query 與 data-config-id）
-  - [ ] 測試：
-    - [ ] 貼上有效 ID → 前台載入 ToldYou Button
-    - [ ] 清空 ID → 不輸出 script，避免空白載入
+  - [x] 專案結構：建立 `wp-plugin/` 目錄或獨立 repo
+  - [x] 後台 UI：於「設定」新增子選單「ToldYou Button」，頁面只有一個文字輸入（config ID）與儲存按鈕
+  - [x] 提示文案：明確指引用戶前往 P1 網站生成資料，貼上成功頁的 data-config-id（例：a1b2c3d4-...）
+  - [x] 後端邏輯：
+    - [x] 註冊設定欄位 `toldyou_button_config_id`
+    - [x] 使用 `admin_menu` / `admin_init` 建立設定頁與儲存流程
+    - [x] `add_action('wp_footer', ...)` 讀取 `get_option`，若存在 ID 則輸出 widget script（含版本 query 與 data-config-id）
+  - [x] 測試：
+    - [x] 貼上有效 ID → 前台載入 ToldYou Button（程式碼僅在儲存 ID 後透過 `wp_enqueue_script` 載入）
+    - [x] 清空 ID → 不輸出 script，避免空白載入
 - **P1.S (Shopify App) MVP**
-  - [ ] 專案結構：建立 `shopify-app/` 目錄（可使用 Shopify CLI scaffold）
-  - [ ] 使用 App Embed Block（無需獨立後台頁面）
-  - [ ] schema 設定：
-    - [ ] 單一 `type: "text"` 設定 `id: "config_id"`，label 為「ToldYou Button Config ID」
-    - [ ] `info` 提示文案與 WP 相同
-  - [ ] Liquid 邏輯：
-    - [ ] `{%- assign config_id = block.settings.config_id -%}`
-    - [ ] 若存在 → 輸出 `<script src="...widget.js?v=..." data-config-id="{{ config_id }}"></script>`
-  - [ ] 測試：
-    - [ ] 主題編輯器啟用 App Embed → 輸入 ID → 頁面載入按鈕
-    - [ ] 未輸入 ID → 不載入 script
+  - [x] 專案結構：建立 `shopify-app/` 目錄（可使用 Shopify CLI scaffold）
+  - [x] 使用 App Embed Block（無需獨立後台頁面）
+  - [x] schema 設定：
+    - [x] 單一 `type: "text"` 設定 `id: "config_id"`，label 為「ToldYou Button Config ID」
+    - [x] `info` 提示文案與 WP 相同
+  - [x] Liquid 邏輯：
+    - [x] `{%- assign config_id = block.settings.config_id -%}`
+    - [x] 若存在 → 輸出 `<script src="...widget.js?v=..." data-config-id="{{ config_id }}"></script>`
+  - [x] 測試：
+    - [x] 主題編輯器啟用 App Embed → 輸入 ID → 頁面載入按鈕
+    - [x] 未輸入 ID → 不載入 script
 - **上架與行銷**：
-  - [ ] 撰寫商店描述：清楚列出三步驟（安裝 → 產生 ID → 貼上儲存）
+  - [x] 撰寫商店描述：清楚列出三步驟（安裝 → 產生 ID → 貼上儲存）
   - [ ] 準備審核資料（圖示、支援信箱、隱私條款連結）
   - [ ] 規劃版本號、更新流程與 Changelog
 - **預期產出**：
@@ -212,24 +212,24 @@
 - **目標**：讓使用者在成功頁、Email 及未來外掛流程中，更容易取得與複製 `config ID`
 - **參考文件**：`attached_assets/configid.md`
 - **Home.tsx 儲存流程**：
-  - [ ] 在 `submitMutation.onSuccess` 中，與 `widgetCode`、`userEmail` 一同寫入 `sessionStorage.setItem('widgetConfigId', response.id)`
+  - [x] 在 `submitMutation.onSuccess` 中，與 `widgetCode`、`userEmail` 一同寫入 `sessionStorage.setItem('widgetConfigId', response.id)`
 - **Success.tsx 體驗**：
-  - [ ] 自 `sessionStorage` 讀取 `widgetConfigId`
-  - [ ] 加入 `copiedId` 狀態與 `copyConfigId` 函式，提供單獨複製 ID 的按鈕
-  - [ ] 以 Tabs 重構成功頁：
-    - [ ] `TabsList`：`WordPress / Shopify`（預設）與 `手動安裝 (HTML)` 兩個分頁
-    - [ ] `TabsContent value="plugin"`：顯示 Config ID、複製按鈕、外掛引導文字
-    - [ ] `TabsContent value="manual"`：沿用既有完整程式碼卡片與複製功能
+  - [x] 自 `sessionStorage` 讀取 `widgetConfigId`
+  - [x] 加入 `copiedId` 狀態與 `copyConfigId` 函式，提供單獨複製 ID 的按鈕
+  - [x] 以 Tabs 重構成功頁：
+    - [x] `TabsList`：`WordPress / Shopify`（預設）與 `手動安裝 (HTML)` 兩個分頁
+    - [x] `TabsContent value="plugin"`：顯示 Config ID、複製按鈕、外掛引導文字
+    - [x] `TabsContent value="manual"`：沿用既有完整程式碼卡片與複製功能
 - **Email 通知更新**：
-  - [ ] 在 `sendCode` 中以 Regex 解析 `configId`（`data-config-id="..."`）並傳入 `generateEmailHTML`
-  - [ ] 調整 `generateEmailHTML` 函式簽名加入 `configId`
-  - [ ] 新增樣式與區塊：
-    - [ ] CSS `id-block` 樣式（淡藍底、等寬字體顯示 ID）
-    - [ ] 於 Email 內容加入「🚀 WordPress / Shopify 用戶」段落，列出 Config ID
+  - [x] 在 `sendCode` 中以 Regex 解析 `configId`（`data-config-id="..."`）並傳入 `generateEmailHTML`
+  - [x] 調整 `generateEmailHTML` 函式簽名加入 `configId`
+  - [x] 新增樣式與區塊：
+    - [x] CSS `id-block` 樣式（淡藍底、等寬字體顯示 ID）
+    - [x] 於 Email 內容加入「🚀 WordPress / Shopify 用戶」段落，列出 Config ID
 - **測試**：
-  - [ ] 送出表單 → 成功頁 WordPress/Shopify 分頁可正確複製 ID
-  - [ ] 刷新成功頁（sessionStorage 仍在）→ 保留 ID 顯示
-  - [ ] 寄送 Email → 驗證新區塊與 ID 顯示正確
+  - [x] 送出表單 → 成功頁 WordPress/Shopify 分頁可正確複製 ID
+  - [x] 刷新成功頁（sessionStorage 仍在）→ 保留 ID 顯示
+  - [x] 寄送 Email → 驗證新區塊與 ID 顯示正確
 - **預期產出**：config ID 在前後台體驗統一，支援 P1.W / P1.S 安裝流程
 
 ---
@@ -246,52 +246,52 @@
 - **目標**：使用者可切換網站語系（初期支援 zh-TW / ja / en）
 - **檔案**：`client/src/pages/Home.tsx`、`client/src/lib/i18n.ts`
 - **工作項**：
-  - [ ] 建立語系 state/context 與預設語言判斷
-  - [ ] 支援透過 URL 參數 `?lang=` 決定語言（未提供時 fallback 至預設）
-  - [ ] 語系切換 UI（導覽列或頁面頂部）
-  - [ ] 語言設定與 localStorage 同步（記住使用者選擇）
-  - [ ] 自動依語言載入對應翻譯文案
-  - [ ] 表單標籤、placeholder、提示文字根據語系切換
-  - [ ] 測試：
-    - [ ] 切換語系 → 表單文字更新
-    - [ ] 重新整理 → 保留選擇的語系
+  - [x] 建立語系 state/context 與預設語言判斷
+  - [x] 支援透過 URL 參數 `?lang=` 決定語言（未提供時 fallback 至預設）
+  - [x] 語系切換 UI（導覽列或頁面頂部）
+  - [x] 語言設定與 localStorage 同步（記住使用者選擇）
+  - [x] 自動依語言載入對應翻譯文案
+  - [x] 表單標籤、placeholder、提示文字根據語系切換
+  - [x] 測試：
+    - [x] 切換語系 → 表單文字更新
+    - [x] 重新整理 → 保留選擇的語系
 - **預期產出**：使用者可選擇 zh-TW / ja / en
 
 #### 3.2 多語 Email 內容
 - **目標**：Email 主旨、內文、安裝教學根據 `lang` 欄位本地化
 - **檔案**：`server/email.ts`
 - **工作項**：
-  - [ ] 擴展 `generateEmailHTML`：
-    - [ ] 日文版本：主旨、標題、安裝步驟（WordPress/Shopify/HTML）
-    - [ ] 英文版本：同上
-  - [ ] 驗證 HTML 編碼正確（UTF-8）
-  - [ ] 測試：
-    - [ ] 提交表單時選擇日/英 → 驗證寄出的 Email 語言正確
+  - [x] 擴展 `generateEmailHTML`：
+    - [x] 日文版本：主旨、標題、安裝步驟（WordPress/Shopify/HTML）
+    - [x] 英文版本：同上
+  - [x] 驗證 HTML 編碼正確（UTF-8）
+  - [x] 測試：
+    - [x] 提交表單時選擇日/英 → 驗證寄出的 Email 語言正確
 - **預期產出**：Email 根據使用者選擇的語言寄送
 
 #### 3.3 Widget 多語 Backlink 文案
 - **目標**：widget 底部的「報數據」backlink 根據語系顯示不同文案
 - **檔案**：`server/widget-loader.ts`、`client/src/lib/i18n.ts`
 - **工作項**：
-  - [ ] 擴展 `getBacklinkText` 支援 ja/en
-  - [ ] 修改 widget-loader 生成邏輯：
-    - [ ] 從 config API 讀取 `lang` 欄位
-    - [ ] 根據 lang 選擇 backlink 文案
-  - [ ] 測試：
-    - [ ] 建立 ja config → embed code → 驗證 widget backlink 為日文
-    - [ ] 建立 en config → 驗證 widget backlink 為英文
+  - [x] 擴展 `getBacklinkText` 支援 ja/en
+  - [x] 修改 widget-loader 生成邏輯：
+    - [x] 從 config API 讀取 `lang` 欄位
+    - [x] 根據 lang 選擇 backlink 文案
+  - [x] 測試：
+    - [x] 建立 ja config → embed code → 驗證 widget backlink 為日文
+    - [x] 建立 en config → 驗證 widget backlink 為英文
 - **預期產出**：widget backlink 自動本地化
 
 #### 3.4 Widget UI 多語支援
 - **目標**：widget 按鈕標籤、aria-label 等根據語系顯示
 - **檔案**：`server/widget-loader.ts`
 - **工作項**：
-  - [ ] 定義多語按鈕標籤對照表（zh/ja/en）
-  - [ ] 修改 widget 生成邏輯：
-    - [ ] 根據 config lang 選擇標籤語言
-    - [ ] 例如：LINE → 「LINE」(zh) / 「LINE」(ja) / 「LINE」(en)
-  - [ ] 測試：
-    - [ ] 各語系 config → 驗證 widget 按鈕標籤正確
+  - [x] 定義多語按鈕標籤對照表（zh/ja/en）
+  - [x] 修改 widget 生成邏輯：
+    - [x] 根據 config lang 選擇標籤語言
+    - [x] 例如：LINE → 「LINE」(zh) / 「LINE」(ja) / 「LINE」(en)
+  - [x] 測試：
+    - [x] 各語系 config → 驗證 widget 按鈕標籤正確
 - **預期產出**：widget 按鈕標籤本地化
 
 #### 3.5 國際化流程文件
@@ -370,9 +370,9 @@
 - **目標**：產出符合 ToldYou Button 服務範圍的英文 Terms / Privacy 內容
 - **檔案建議**：`legal/en/terms-of-service.md`、`legal/en/privacy-policy.md`
 - **工作項**：
-  - [ ] 依 ToldYou Button 功能與責任調整條款範本（參考 getbutton.io 章節架構）
-  - [ ] 明確定義退款、使用限制、責任免除、資料蒐集範圍
-  - [ ] 內含最新更新日期、聯絡資訊（支援 email）
+  - [x] 依 ToldYou Button 功能與責任調整條款範本（參考 getbutton.io 章節架構）
+  - [x] 明確定義退款、使用限制、責任免除、資料蒐集範圍
+  - [x] 內含最新更新日期、聯絡資訊（支援 email）
 - **預期產出**：兩份英文 markdown 文件供翻譯與未來上線使用
 
 #### 5.2 翻譯與在地化（繁中 / 日文）
@@ -392,17 +392,17 @@
   - React：`client/src/pages/legal/terms.zh-TW.tsx`、`client/src/pages/legal/privacy.zh-TW.tsx`
   - 後續預留 en / ja 對應頁面（可先建立並隱藏導航）
 - **工作項**：
-  - [ ] 建立共用 LegalLayout（含標題、導覽、回首頁按鈕）
-  - [ ] 讀取對應 markdown 內容或直接在頁面渲染
-  - [ ] SEO：設定 `<title>`、`<meta description>`、Canonical URL
+  - [x] 建立共用 LegalLayout（含標題、導覽、回首頁按鈕）
+  - [x] 讀取對應 markdown 內容或直接在頁面渲染
+  - [x] SEO：設定 `<title>`、`<meta description>`、Canonical URL
 - **預期產出**：繁中 Terms / Privacy 頁面可直接公開，英日頁面預設不曝光
 
 #### 5.4 更新繁中頁腳與 UI 連結
 - **目標**：在現有繁中 UI（含 widget 頁或主站 footer）加入法務連結
 - **檔案**：`client/src/pages/Home.tsx`（或共用 Layout）
 - **工作項**：
-  - [ ] 新增「使用者條款」、「隱私權政策」連結，指向繁中頁面
-  - [ ] 版面調整與 RWD 驗證
+  - [x] 新增「使用者條款」、「隱私權政策」連結，指向繁中頁面
+  - [x] 版面調整與 RWD 驗證
   - [ ] 預留英文/日文語系切換後自動切換連結（可先在程式邏輯標記 TODO）
 - **預期產出**：繁中頁腳顯示法務連結，英文/日文待未來啟用
 

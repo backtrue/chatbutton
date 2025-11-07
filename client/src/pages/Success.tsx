@@ -3,21 +3,32 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Check, Copy, FileCode, ArrowLeft, Clipboard } from 'lucide-react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import { useLanguage } from '@/language/language-context';
+import { getHomeCopy, getSuccessCopy } from '@/language/translations';
+import { getLanguageOptions, type Language } from '@shared/language';
 
-interface SuccessPageProps {
-  code: string;
-  email: string;
-}
+type SuccessTab = 'plugin' | 'manual';
 
 export default function Success() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+  const { language, setLanguage } = useLanguage();
+  const copy = useMemo(() => getSuccessCopy(language), [language]);
+  const homeCopy = useMemo(() => getHomeCopy(language), [language]);
+  const languageOptions = useMemo(() => getLanguageOptions(), []);
   const [copied, setCopied] = useState(false);
   const [copiedId, setCopiedId] = useState(false);
-  const [activeTab, setActiveTab] = useState<'plugin' | 'manual'>('manual');
+  const [activeTab, setActiveTab] = useState<SuccessTab>('manual');
 
   // Retrieve data from sessionStorage to avoid exposing email in URL
   const email = sessionStorage.getItem('userEmail') || '';
@@ -29,14 +40,15 @@ export default function Success() {
       await navigator.clipboard.writeText(code);
       setCopied(true);
       toast({
-        title: '✓ 已複製',
-        description: '程式碼已複製到剪貼簿',
+        title: copy.toast.copySuccessTitle,
+        description: copy.toast.copyCodeSuccessDescription,
       });
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {
+      console.error('[Success] Failed to copy widget code', error);
       toast({
-        title: '複製失敗',
-        description: '請手動選擇並複製程式碼',
+        title: copy.toast.copyErrorTitle,
+        description: copy.toast.copyCodeErrorDescription,
         variant: 'destructive',
       });
     }
@@ -45,8 +57,8 @@ export default function Success() {
   const copyConfigId = async () => {
     if (!configId) {
       toast({
-        title: '無可複製的 ID',
-        description: '請重新產生按鈕或稍後再試。',
+        title: copy.toast.missingConfigTitle,
+        description: copy.toast.missingConfigDescription,
         variant: 'destructive',
       });
       return;
@@ -56,14 +68,15 @@ export default function Success() {
       await navigator.clipboard.writeText(configId);
       setCopiedId(true);
       toast({
-        title: '✓ 已複製',
-        description: 'Config ID 已複製到剪貼簿',
+        title: copy.toast.copySuccessTitle,
+        description: copy.toast.copyConfigSuccessDescription,
       });
       setTimeout(() => setCopiedId(false), 2000);
     } catch (error) {
+      console.error('[Success] Failed to copy config id', error);
       toast({
-        title: '複製失敗',
-        description: '請手動選擇並複製 Config ID',
+        title: copy.toast.copyErrorTitle,
+        description: copy.toast.copyConfigErrorDescription,
         variant: 'destructive',
       });
     }
@@ -76,68 +89,85 @@ export default function Success() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
       <header className="bg-white border-b border-gray-200">
         <div className="max-w-4xl mx-auto px-4 py-6">
-          <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setLocation('/')}
-              className="gap-2"
-              data-testid="button-back"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              返回
-            </Button>
-            <div>
-              <h1 className="text-2xl font-bold text-foreground">ToldYou Button</h1>
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div className="flex items-center gap-4">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setLocation('/')}
+                className="gap-2"
+                data-testid="button-back"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                {copy.header.backButton}
+              </Button>
+              <h1 className="text-2xl font-bold text-foreground">{copy.header.productName}</h1>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                {homeCopy.languageSelectorLabel}
+              </span>
+              <Select value={language} onValueChange={(value) => setLanguage(value as Language)}>
+                <SelectTrigger className="w-[140px]">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {languageOptions.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Main Content */}
       <main className="max-w-3xl mx-auto px-4 py-8">
-        {/* Success Message */}
         <div className="mb-8 text-center">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
             <Check className="w-8 h-8 text-green-600" />
           </div>
-          <h2 className="text-3xl font-bold text-foreground mb-2">
-            程式碼已準備就緒！
-          </h2>
+          <h2 className="text-3xl font-bold text-foreground mb-2">{copy.hero.title}</h2>
           <p className="text-muted-foreground">
-            我們已經將安裝程式碼寄送到 <strong>{email}</strong>
+            {copy.hero.description.beforeEmail}
+            <strong>{email}</strong>
+            {copy.hero.description.afterEmail}
           </p>
         </div>
 
-        {/* Code Block & Config ID Tabs */}
         <Tabs
           value={activeTab}
-          onValueChange={(value: string) => setActiveTab(value as 'plugin' | 'manual')}
+          onValueChange={(value: string) => setActiveTab(value as SuccessTab)}
           className="mb-6"
         >
           <TabsList className="grid w-full grid-cols-2 bg-muted">
-            <TabsTrigger value="plugin">WordPress / Shopify</TabsTrigger>
-            <TabsTrigger value="manual">手動安裝 (HTML)</TabsTrigger>
+            <TabsTrigger value="plugin">{copy.tabs.plugin.label}</TabsTrigger>
+            <TabsTrigger value="manual">{copy.tabs.manual.label}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="plugin" className="mt-4 space-y-4">
             <Card className="p-6 space-y-4">
               <div className="flex items-center gap-2">
                 <Clipboard className="w-5 h-5 text-primary" />
-                <h3 className="text-lg font-semibold text-foreground">WordPress / Shopify 安裝</h3>
+                <h3 className="text-lg font-semibold text-foreground">
+                  {copy.tabs.plugin.card.title}
+                </h3>
               </div>
 
               <p className="text-sm text-muted-foreground">
-                請複製下方 <strong>Config ID</strong> 並貼到外掛或 App 的設定欄位中。
+                {copy.tabs.plugin.card.intro.before}
+                <strong>{copy.tabs.plugin.card.intro.highlight}</strong>
+                {copy.tabs.plugin.card.intro.after}
               </p>
               <div className="flex items-center gap-2">
                 <Input
                   value={configId || ''}
                   readOnly
-                  placeholder="尚未取得 Config ID，請返回上一頁重新生成"
+                  placeholder={copy.tabs.plugin.card.placeholder}
                   className="font-mono text-sm h-10"
                   disabled={!configId}
                 />
@@ -151,35 +181,39 @@ export default function Success() {
                   disabled={!configId}
                 >
                   {copiedId ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                  <span className="sr-only">複製 Config ID</span>
+                  <span className="sr-only">{copy.tabs.plugin.card.copyButtonSrLabel}</span>
                 </Button>
               </div>
 
               {!configId && (
-                <p className="text-xs text-destructive">
-                  尚未偵測到 Config ID，請返回上一頁重新生成。
-                </p>
+                <p className="text-xs text-destructive">{copy.tabs.plugin.card.missingWarning}</p>
               )}
             </Card>
 
             <Card className="p-6">
-              <h3 className="text-lg font-semibold text-foreground mb-4">快速安裝指南</h3>
+              <h3 className="text-lg font-semibold text-foreground mb-4">
+                {copy.tabs.plugin.guideCard.title}
+              </h3>
               <div className="space-y-6">
                 <div className="border-l-4 border-primary pl-4">
-                  <h4 className="font-semibold text-foreground mb-2">WordPress 外掛</h4>
+                  <h4 className="font-semibold text-foreground mb-2">
+                    {copy.tabs.plugin.guideCard.wordpress.title}
+                  </h4>
                   <ol className="text-sm text-muted-foreground space-y-1 list-decimal list-inside">
-                    <li>登入 WordPress 後台 → 「外掛」 → 「ToldYou Button」。</li>
-                    <li>貼上上方 Config ID 並點擊「儲存」。</li>
-                    <li>回到網站前台重新整理頁面檢查按鈕。</li>
+                    {copy.tabs.plugin.guideCard.wordpress.items.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
                   </ol>
                 </div>
 
                 <div className="border-l-4 border-green-500 pl-4">
-                  <h4 className="font-semibold text-foreground mb-2">Shopify App</h4>
+                  <h4 className="font-semibold text-foreground mb-2">
+                    {copy.tabs.plugin.guideCard.shopify.title}
+                  </h4>
                   <ol className="text-sm text-muted-foreground space-y-1 list-decimal list-inside">
-                    <li>登入 Shopify 後台 → 「Apps」 → 「ToldYou Button」。</li>
-                    <li>貼上上方 Config ID 並儲存設定。</li>
-                    <li>重新整理商店前台確認按鈕顯示。</li>
+                    {copy.tabs.plugin.guideCard.shopify.items.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
                   </ol>
                 </div>
               </div>
@@ -191,7 +225,9 @@ export default function Success() {
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
                   <FileCode className="w-5 h-5 text-primary" />
-                  <h3 className="text-lg font-semibold text-foreground">您的程式碼</h3>
+                  <h3 className="text-lg font-semibold text-foreground">
+                    {copy.tabs.manual.codeCard.title}
+                  </h3>
                 </div>
                 <Button
                   variant="outline"
@@ -203,12 +239,12 @@ export default function Success() {
                   {copied ? (
                     <>
                       <Check className="w-4 h-4" />
-                      已複製
+                      {copy.tabs.manual.codeCard.copyButton.copied}
                     </>
                   ) : (
                     <>
                       <Copy className="w-4 h-4" />
-                      複製程式碼
+                      {copy.tabs.manual.codeCard.copyButton.default}
                     </>
                   )}
                 </Button>
@@ -221,26 +257,29 @@ export default function Success() {
               </div>
             </Card>
             <Card className="p-6">
-              <h3 className="text-lg font-semibold text-foreground mb-4">快速安裝指南</h3>
+              <h3 className="text-lg font-semibold text-foreground mb-4">
+                {copy.tabs.manual.guideCard.title}
+              </h3>
               <div className="border-l-4 border-orange-500 pl-4">
-                <h4 className="font-semibold text-foreground mb-2">純 HTML 網站</h4>
+                <h4 className="font-semibold text-foreground mb-2">
+                  {copy.tabs.manual.guideCard.sectionTitle}
+                </h4>
                 <ol className="text-sm text-muted-foreground space-y-1 list-decimal list-inside">
-                  <li>開啟您的 HTML 檔案（通常是 index.html）。</li>
-                  <li>
-                    在 <code>&lt;/body&gt;</code> 標籤前貼上上方程式碼。
-                  </li>
-                  <li>儲存檔案並上傳至伺服器後重新整理頁面。</li>
+                  {copy.tabs.manual.guideCard.items.map((item) => (
+                    <li key={item} dangerouslySetInnerHTML={{ __html: item }} />
+                  ))}
                 </ol>
               </div>
             </Card>
           </TabsContent>
         </Tabs>
 
-        {/* Next Steps */}
         <Card className="p-6 bg-blue-50 border-blue-200">
-          <h3 className="text-lg font-semibold text-foreground mb-2">接下來</h3>
+          <h3 className="text-lg font-semibold text-foreground mb-2">
+            {copy.actions.nextStepsTitle}
+          </h3>
           <p className="text-sm text-muted-foreground mb-4">
-            上傳程式碼後，重新整理您的網站即可看到聊天按鈕出現！
+            {copy.actions.nextStepsDescription}
           </p>
           <div className="flex flex-col sm:flex-row gap-3">
             <Button
@@ -248,22 +287,21 @@ export default function Success() {
               variant="default"
               data-testid="button-create-another"
             >
-              建立另一個按鈕
+              {copy.actions.createAnother}
             </Button>
             <Button
               variant="outline"
               onClick={() => window.open('https://thinkwithblack.com', '_blank')}
               data-testid="link-thinkwithblack"
             >
-              了解更多關於報數據
+              {copy.actions.learnMore}
             </Button>
           </div>
         </Card>
 
-        {/* Footer */}
         <footer className="mt-8 text-center text-sm text-muted-foreground">
           <p>
-            © 2024 ToldYou Button ·
+            © 2024 {copy.header.productName} ·
             <a
               href="https://thinkwithblack.com"
               target="_blank"
@@ -271,24 +309,24 @@ export default function Success() {
               className="ml-1 text-primary hover:underline"
               data-testid="link-footer-backlink"
             >
-              報數據
+              {homeCopy.previewBacklinkLabel}
             </a>
           </p>
           <nav className="mt-2 flex items-center justify-center gap-3">
             <Link
-              href="/legal/terms"
+              href={copy.footer.termsHref}
               className="text-primary hover:underline"
               data-testid="link-success-footer-terms"
             >
-              使用者條款
+              {copy.footer.termsLabel}
             </Link>
             <span aria-hidden="true">·</span>
             <Link
-              href="/legal/privacy"
+              href={copy.footer.privacyHref}
               className="text-primary hover:underline"
               data-testid="link-success-footer-privacy"
             >
-              隱私權政策
+              {copy.footer.privacyLabel}
             </Link>
           </nav>
         </footer>

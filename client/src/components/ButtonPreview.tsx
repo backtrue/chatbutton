@@ -1,15 +1,28 @@
 import { useState } from 'react';
-import { MessageCircle, Phone, Mail, Instagram, ChevronUp, ChevronDown } from 'lucide-react';
+import {
+  MessageCircle,
+  Phone,
+  Mail,
+  Instagram,
+  ChevronUp,
+  ChevronDown,
+} from 'lucide-react';
 import { SiLine, SiMessenger, SiWhatsapp } from 'react-icons/si';
+import type { IconType } from 'react-icons';
+import type { LucideIcon } from 'lucide-react';
 import { PLATFORM_COLORS } from '@shared/platformColors';
+import type { PlatformId } from '@/language/translations';
 
 interface ButtonPreviewProps {
-  platforms: string[];
+  platforms: PlatformId[];
   position: 'bottom-left' | 'bottom-right';
   color: string;
+  emptyHint: string;
+  toggleTitle: string;
+  backlinkLabel: string;
 }
 
-const platformIcons: Record<string, any> = {
+const platformIcons: Record<PlatformId, LucideIcon | IconType> = {
   line: SiLine,
   messenger: SiMessenger,
   whatsapp: SiWhatsapp,
@@ -18,13 +31,20 @@ const platformIcons: Record<string, any> = {
   email: Mail,
 };
 
-export function ButtonPreview({ platforms, position, color }: ButtonPreviewProps) {
+export function ButtonPreview({
+  platforms,
+  position,
+  color,
+  emptyHint,
+  toggleTitle,
+  backlinkLabel,
+}: ButtonPreviewProps) {
   const [isExpanded, setIsExpanded] = useState(true);
 
   if (platforms.length === 0) {
     return (
       <div className="absolute bottom-6 right-6 text-sm text-muted-foreground">
-        請選擇至少一個平台來查看預覽
+        {emptyHint}
       </div>
     );
   }
@@ -61,7 +81,7 @@ export function ButtonPreview({ platforms, position, color }: ButtonPreviewProps
         className="w-14 h-14 rounded-full shadow-xl flex items-center justify-center text-white transition-transform hover:scale-105 relative"
         style={{ backgroundColor: color }}
         data-testid="preview-main-button"
-        title="點擊切換展開/收合"
+        title={toggleTitle}
       >
         <MessageCircle className="w-7 h-7" />
         <div className="absolute -top-1 -right-1 w-5 h-5 bg-white rounded-full shadow-sm flex items-center justify-center">
@@ -82,7 +102,7 @@ export function ButtonPreview({ platforms, position, color }: ButtonPreviewProps
           className="hover:text-gray-700"
           data-testid="preview-backlink"
         >
-          報數據
+          {backlinkLabel}
         </a>
       </div>
     </div>

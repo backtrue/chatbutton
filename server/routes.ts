@@ -7,7 +7,7 @@ import { generateUniversalWidgetScript } from "./widget-loader";
 import { registerShopifyComplianceWebhooks } from "./shopify-webhooks";
 import { insertConfigSchema, buttonConfigSchema } from "@shared/schema";
 import type { ButtonConfig } from "@shared/schema";
-import type { Language } from "../client/src/lib/i18n";
+import type { Language } from "@shared/language";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   const emailService = createEmailService();
@@ -19,11 +19,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const validatedData = insertConfigSchema.parse(req.body);
       const configJson = validatedData.configJson as ButtonConfig;
 
+      const preferredLanguage =
+        (req as Express.Request & { preferredLanguage?: Language }).preferredLanguage ??
+        validatedData.lang ??
+        "zh-TW";
+
       // Validate button config
       buttonConfigSchema.parse(configJson);
 
       // Save to database first to get the config ID
-      const config = await storage.createConfig(validatedData);
+      const config = await storage.createConfig({
+        ...validatedData,
+        lang: preferredLanguage,
+      });
       
       // Construct base URL from request (force HTTPS in production)
       const protocol = req.get('x-forwarded-proto') || req.protocol;
@@ -33,7 +41,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const widgetCode = generateSimplifiedEmbedCode(config.id, baseUrl);
       
       // Also generate full code for email (legacy format with all details)
-      const fullWidgetCode = generateWidgetCode(configJson, validatedData.lang as Language);
+      const fullWidgetCode = generateWidgetCode(configJson, preferredLanguage);
 
       // Send email with code (using full code for completeness)
       try {
@@ -41,7 +49,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           validatedData.email,
           widgetCode,
           configJson,
-          validatedData.lang || 'zh-TW'
+          preferredLanguage
         );
       } catch (emailError) {
         console.error('Failed to send email:', emailError);

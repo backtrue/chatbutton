@@ -3,17 +3,23 @@ import { Link } from "wouter";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const navItems = [
-  { key: "terms" as const, label: "使用者條款", href: "/legal/terms" },
-  { key: "privacy" as const, label: "隱私權政策", href: "/legal/privacy" },
+type LegalNavItem = { key: "terms" | "privacy"; label: string; href: string };
+
+const defaultNavItems: LegalNavItem[] = [
+  { key: "terms", label: "使用者條款", href: "/legal/terms" },
+  { key: "privacy", label: "隱私權政策", href: "/legal/privacy" },
 ];
 
 type LegalLayoutProps = {
   title: string;
   description: string;
   canonicalPath: string;
-  current: (typeof navItems)[number]["key"];
+  current: LegalNavItem["key"];
   children: ReactNode;
+  tagLine?: string;
+  backLabel?: string;
+  backHref?: string;
+  navItems?: LegalNavItem[];
 };
 
 function updateMetaTag(name: string, content: string) {
@@ -58,7 +64,16 @@ export function LegalLayout({
   canonicalPath,
   current,
   children,
+  tagLine,
+  backLabel,
+  backHref,
+  navItems,
 }: LegalLayoutProps) {
+  const items = navItems ?? defaultNavItems;
+  const resolvedBackLabel = backLabel ?? "返回首頁";
+  const resolvedTagLine = tagLine ?? "法務條款與政策";
+  const resolvedBackHref = backHref ?? "/";
+
   useEffect(() => {
     if (typeof document !== "undefined") {
       document.title = `${title} | ToldYou Button`;
@@ -76,7 +91,7 @@ export function LegalLayout({
             <div>
               <h1 className="text-2xl font-bold text-foreground">ToldYou Button</h1>
               <p className="text-sm text-muted-foreground mt-1">
-                法務條款與政策
+                {resolvedTagLine}
               </p>
             </div>
             <Button
@@ -86,15 +101,15 @@ export function LegalLayout({
               asChild
               data-testid="button-legal-back-home"
             >
-              <Link href="/">
+              <Link href={resolvedBackHref}>
                 <ArrowLeft className="w-4 h-4" />
-                返回首頁
+                {resolvedBackLabel}
               </Link>
             </Button>
           </div>
 
           <nav className="flex items-center gap-3 text-sm font-medium">
-            {navItems.map((item) => (
+            {items.map((item) => (
               <Link key={item.key} href={item.href} className="group">
                 <span
                   className={`px-3 py-2 rounded-md transition-colors ${

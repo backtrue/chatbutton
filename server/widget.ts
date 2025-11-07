@@ -1,7 +1,7 @@
 import type { ButtonConfig } from "@shared/schema";
 import { PLATFORM_COLORS } from "@shared/platformColors";
-import { getBacklinkText, getBacklinkUrl } from "../client/src/lib/i18n";
-import type { Language } from "../client/src/lib/i18n";
+import { getBacklinkText, getBacklinkUrl } from "@shared/language";
+import type { Language } from "@shared/language";
 import { getWidgetVersion } from "./version";
 
 // Normalize color to Hex format

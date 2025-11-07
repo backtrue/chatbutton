@@ -1,8 +1,16 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import {
+  buildLanguageCookie,
+  detectLanguageFromRequest,
+  readLanguageCookie,
+} from "./locale";
+import { isSupportedLanguage } from "@shared/language";
+import type { Language } from "@shared/language";
 
 const app = express();
+app.set("trust proxy", true);
 
 declare module 'http' {
   interface IncomingMessage {
@@ -15,6 +23,30 @@ app.use(express.json({
   }
 }));
 app.use(express.urlencoded({ extended: false }));
+
+app.use((req, res, next) => {
+  const cookieLang = readLanguageCookie(req.headers.cookie ?? undefined);
+  const queryLang =
+    typeof req.query.lang === "string" && isSupportedLanguage(req.query.lang)
+      ? (req.query.lang as Language)
+      : null;
+  const detection = detectLanguageFromRequest(req);
+
+  const selectedLang: Language = queryLang ?? cookieLang ?? detection.lang;
+
+  (req as Request & { preferredLanguage?: Language }).preferredLanguage = selectedLang;
+  res.locals.initialLang = selectedLang;
+  res.locals.localeDetection = detection;
+
+  const shouldSetCookie = queryLang !== null || cookieLang === null;
+  if (shouldSetCookie) {
+    const forwardedProto = req.headers["x-forwarded-proto"];
+    const secure = (typeof forwardedProto === "string" && forwardedProto === "https") || req.secure;
+    res.setHeader("Set-Cookie", buildLanguageCookie(selectedLang, { secure }));
+  }
+
+  next();
+});
 
 app.use((req, res, next) => {
   const start = Date.now();

@@ -8,6 +8,7 @@ import Success from "@/pages/Success";
 import NotFound from "@/pages/not-found";
 import TermsZhTWPage from "@/pages/legal/terms.zh-TW";
 import PrivacyZhTWPage from "@/pages/legal/privacy.zh-TW";
+import { LanguageProvider } from "@/language/language-context";
 
 function Router() {
   return (
@@ -24,10 +25,12 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Router />
-      </TooltipProvider>
+      <LanguageProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Router />
+        </TooltipProvider>
+      </LanguageProvider>
     </QueryClientProvider>
   );
 }

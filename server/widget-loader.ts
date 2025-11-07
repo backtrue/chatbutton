@@ -23,6 +23,57 @@ export function generateUniversalWidgetScript(): string {
   var PLATFORM_COLORS = ${platformColors};
   var PLATFORM_ICONS = ${platformIconsJson};
   var CHAT_ICON = '${chatIcon}';
+
+  var TRANSLATIONS = {
+    'zh-TW': {
+      mainButtonAria: '開啟聊天選單',
+      platformTitles: {
+        line: '透過 LINE 聯絡我們',
+        messenger: '透過 Messenger 聯絡我們',
+        whatsapp: '透過 WhatsApp 聯絡我們',
+        instagram: '透過 Instagram 發送訊息',
+        phone: '撥打電話給我們',
+        email: '發送 Email 給我們',
+        default: '聯絡客服'
+      }
+    },
+    'ja': {
+      mainButtonAria: 'チャットメニューを開く',
+      platformTitles: {
+        line: 'LINE で連絡する',
+        messenger: 'Messenger で連絡する',
+        whatsapp: 'WhatsApp でメッセージを送る',
+        instagram: 'Instagram でメッセージを送る',
+        phone: '電話をかける',
+        email: 'メールを送る',
+        default: 'お問い合わせ'
+      }
+    },
+    'en': {
+      mainButtonAria: 'Open chat menu',
+      platformTitles: {
+        line: 'Contact us on LINE',
+        messenger: 'Contact us on Messenger',
+        whatsapp: 'Message us on WhatsApp',
+        instagram: 'Message us on Instagram',
+        phone: 'Call us',
+        email: 'Send us an email',
+        default: 'Contact us'
+      }
+    }
+  };
+
+  function normalizeLanguage(lang) {
+    if (lang === 'ja' || lang === 'en') {
+      return lang;
+    }
+    return 'zh-TW';
+  }
+
+  function getTranslation(lang) {
+    var normalized = normalizeLanguage(lang);
+    return TRANSLATIONS[normalized] || TRANSLATIONS['zh-TW'];
+  }
   
   var scripts = document.getElementsByTagName('script');
   var currentScript = scripts[scripts.length - 1];
@@ -171,7 +222,9 @@ export function generateUniversalWidgetScript(): string {
     var platforms = config.platforms;
     var position = config.position;
     var color = config.color;
-    var backlinkText = getBacklinkText(lang);
+    var normalizedLang = normalizeLanguage(lang);
+    var translation = getTranslation(normalizedLang);
+    var backlinkText = getBacklinkText(normalizedLang);
     var isExpanded = false;
     
     // Create button data
@@ -184,11 +237,14 @@ export function generateUniversalWidgetScript(): string {
       var url = getPlatformUrl(platform, normalizedValue);
       if (!url) continue;
 
+      var buttonTitle = translation.platformTitles[platform] || translation.platformTitles.default;
+
       buttons.push({
         platform: platform,
         url: url,
         icon: PLATFORM_ICONS[platform],
         label: getPlatformLabel(platform),
+        title: buttonTitle,
         color: PLATFORM_COLORS[platform]
       });
     }
@@ -207,7 +263,8 @@ export function generateUniversalWidgetScript(): string {
       button.href = btn.url;
       button.target = '_blank';
       button.rel = 'noopener noreferrer';
-      button.title = btn.label;
+      button.title = btn.title;
+      button.setAttribute('aria-label', btn.title);
       button.style.cssText = 'display:flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:50%;background-color:' + btn.color + ';color:#fff;text-decoration:none;box-shadow:0 4px 12px rgba(0,0,0,0.15);transition:transform 0.2s,box-shadow 0.2s;transition-delay:' + (index * 0.03) + 's;';
       
       var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -240,7 +297,8 @@ export function generateUniversalWidgetScript(): string {
     // Create main FAB button
     var mainButton = document.createElement('button');
     mainButton.style.cssText = 'width:56px;height:56px;border-radius:50%;background-color:' + color + ';color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.2);transition:transform 0.2s,box-shadow 0.2s;';
-    mainButton.setAttribute('aria-label', '開啟聊天選單');
+    mainButton.setAttribute('aria-label', translation.mainButtonAria);
+    mainButton.setAttribute('title', translation.mainButtonAria);
     mainButton.setAttribute('aria-expanded', 'false');
     
     var mainSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
