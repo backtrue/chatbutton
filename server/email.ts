@@ -244,26 +244,26 @@ type EmailCopy = {
 const EMAIL_COPY: Record<Language, EmailCopy> = {
   "zh-TW": {
     hero: {
-      title: " 您的聊天按鈕程式碼已準備就緒！",
+      title: "🎉 您的聊天按鈕程式碼已準備就緒！",
       description: "感謝您使用 ToldYou Button！以下是您的專屬按鈕程式碼。",
     },
     badges: {
-      free: " ✓ 完全免費",
-      unlimited: " ✓ 無限使用",
-      simple: " ✓ 超簡短程式碼",
+      free: "✓ 完全免費",
+      unlimited: "✓ 無限使用",
+      simple: "✓ 超簡短程式碼",
     },
     configSection: {
-      title: " 🚀 WordPress / Shopify 用戶（建議）",
+      title: "🚀 WordPress / Shopify 用戶（建議）",
       description: "若您使用 ToldYou Button 的 WordPress 外掛或 Shopify App，請複製下方 Config ID 並貼到外掛設定中。",
       label: "您的 Config ID：",
       empty: "尚未偵測到 Config ID",
     },
     codeSection: {
-      title: " 📋 您的程式碼（只有 3 行！）",
-      hint: " 💡 新版本！我們已將程式碼簡化為 3 行，更方便安裝。所有設定都安全儲存在雲端。",
+      title: "📋 您的程式碼（只有 3 行！）",
+      hint: "💡 新版本！我們已將程式碼簡化為 3 行，更方便安裝。所有設定都安全儲存在雲端。",
     },
     instructions: {
-      title: " 💡 安裝說明",
+      title: "💡 安裝說明",
       wordpress: {
         title: "WordPress 網站",
         items: [
@@ -293,7 +293,7 @@ const EMAIL_COPY: Record<Language, EmailCopy> = {
       },
     },
     preview: {
-      title: " ✨ 預覽效果",
+      title: "✨ 預覽效果",
       description: "安裝完成後，您的網站將出現以下互動按鈕：",
       items: [
         "主按鈕可自訂顏色與位置",
@@ -302,7 +302,7 @@ const EMAIL_COPY: Record<Language, EmailCopy> = {
       ],
     },
     faq: {
-      title: " 🔧 常見問題",
+      title: "🔧 常見問題",
       items: [
         {
           question: "按鈕沒有出現怎麼辦？",
@@ -319,28 +319,28 @@ const EMAIL_COPY: Record<Language, EmailCopy> = {
       providedBy: "由",
     },
   },
-  ja: {
+  "ja": {
     hero: {
-      title: " 🎉 チャットボタンのコードが準備できました！",
+      title: "🎉 チャットボタンのコードが準備できました！",
       description: "ToldYou Button をご利用いただきありがとうございます。以下があなた専用のコードです。",
     },
     badges: {
-      free: " ✓ 完全無料",
-      unlimited: " ✓ 無制限利用",
-      simple: " ✓ たった 3 行",
+      free: "✓ 完全無料",
+      unlimited: "✓ 無制限利用",
+      simple: "✓ たった 3 行",
     },
     configSection: {
-      title: " 🚀 WordPress / Shopify ユーザー向け（推奨）",
+      title: "🚀 WordPress / Shopify ユーザー向け（推奨）",
       description: "WordPress プラグインまたは Shopify アプリをご利用の場合は、以下の Config ID をコピーして設定欄に貼り付けてください。",
       label: "あなたの Config ID：",
       empty: "Config ID が検出されませんでした",
     },
     codeSection: {
-      title: " 📋 あなたのコード（わずか 3 行）",
-      hint: " 💡 新バージョンではコードを 3 行に短縮し、さらに設置が簡単になりました。設定はすべてクラウドに安全に保存されます。",
+      title: "📋 あなたのコード（わずか 3 行）",
+      hint: "💡 新バージョンではコードを 3 行に短縮し、さらに設置が簡単になりました。設定はすべてクラウドに安全に保存されます。",
     },
     instructions: {
-      title: " 💡 設置手順",
+      title: "💡 設置手順",
       wordpress: {
         title: "WordPress サイト",
         items: [
@@ -370,7 +370,7 @@ const EMAIL_COPY: Record<Language, EmailCopy> = {
       },
     },
     preview: {
-      title: " ✨ ボタンのプレビュー",
+      title: "✨ ボタンのプレビュー",
       description: "設置後に表示されるボタンのイメージです：",
       items: [
         "ブランドカラーに合わせてカスタマイズ可能",
@@ -379,7 +379,7 @@ const EMAIL_COPY: Record<Language, EmailCopy> = {
       ],
     },
     faq: {
-      title: " 🔧 よくある質問",
+      title: "🔧 よくある質問",
       items: [
         {
           question: "ボタンが表示されません。どうすればいいですか？",
@@ -398,26 +398,26 @@ const EMAIL_COPY: Record<Language, EmailCopy> = {
   },
   en: {
     hero: {
-      title: " 🎉 Your chat button code is ready!",
+      title: "🎉 Your chat button code is ready!",
       description: "Thanks for using ToldYou Button. Your personalized embed code is below.",
     },
     badges: {
-      free: " ✓ 100% Free",
-      unlimited: " ✓ Unlimited usage",
-      simple: " ✓ Just 3 lines",
+      free: "✓ 100% Free",
+      unlimited: "✓ Unlimited usage",
+      simple: "✓ Just 3 lines",
     },
     configSection: {
-      title: " 🚀 WordPress / Shopify users (recommended)",
+      title: "🚀 WordPress / Shopify users (recommended)",
       description: "If you’re using the ToldYou Button WordPress plugin or Shopify app, copy the Config ID below and paste it into the plugin settings.",
       label: "Your Config ID:",
       empty: "Config ID not detected yet",
     },
     codeSection: {
-      title: " 📋 Your code (only 3 lines!)",
-      hint: " 💡 New version! We trimmed the embed to three lines so it’s easier to install. All settings stay safely in the cloud.",
+      title: "📋 Your code (only 3 lines!)",
+      hint: "💡 New version! We trimmed the embed to three lines so it’s easier to install. All settings stay safely in the cloud.",
     },
     instructions: {
-      title: " 💡 Installation guide",
+      title: "💡 Installation guide",
       wordpress: {
         title: "WordPress sites",
         items: [
@@ -447,7 +447,7 @@ const EMAIL_COPY: Record<Language, EmailCopy> = {
       },
     },
     preview: {
-      title: " ✨ Preview",
+      title: "✨ Preview",
       description: "Here’s what your button experience will look like once installed:",
       items: [
         "Customizable colors and position",
@@ -456,7 +456,7 @@ const EMAIL_COPY: Record<Language, EmailCopy> = {
       ],
     },
     faq: {
-      title: " 🔧 Frequently asked questions",
+      title: "🔧 Frequently asked questions",
       items: [
         {
           question: "The button isn’t showing—what should I check?",
