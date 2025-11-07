@@ -283,8 +283,8 @@ const HOME_COPY: Record<Language, HomeCopy> = {
     footer: {
       termsLabel: "Terms of Service",
       privacyLabel: "Privacy Policy",
-      termsHref: "/legal/terms",
-      privacyHref: "/legal/privacy",
+      termsHref: "/en/legal/terms",
+      privacyHref: "/en/legal/privacy",
     },
   },
   ja: {
@@ -361,8 +361,8 @@ const HOME_COPY: Record<Language, HomeCopy> = {
     footer: {
       termsLabel: "利用規約",
       privacyLabel: "プライバシーポリシー",
-      termsHref: "/legal/terms",
-      privacyHref: "/legal/privacy",
+      termsHref: "/jp/legal/terms",
+      privacyHref: "/jp/legal/privacy",
     },
   },
 };

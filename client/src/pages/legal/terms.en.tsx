@@ -12,7 +12,7 @@ export default function TermsEnPage() {
       current="terms"
       tagLine="Legal Policies"
       backLabel="Back to Home"
-      backHref="/?lang=en"
+      backHref="/en"
       navItems={[
         { key: "terms", label: "Terms of Service", href: "/en/legal/terms" },
         { key: "privacy", label: "Privacy Policy", href: "/en/legal/privacy" },
